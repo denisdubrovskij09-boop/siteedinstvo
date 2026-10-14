@@ -96,7 +96,7 @@ var secs=['top','oproekte','narody','nasledie','events','contacts'].map(function
 var links=[...document.querySelectorAll('.ui-nav-links a')];
 function act(){var y=scrollY+110,cur='top';secs.forEach(function(s){if(s.offsetTop<=y)cur=s.id});links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+cur)})}
 addEventListener('scroll',act,{passive:true});act();
-['evform','cbform','subform'].forEach(id=>{var f=document.getElementById(id);if(f)f.addEventListener('submit',e=>{e.preventDefault();window.lawxUI&&window.lawxUI.toast('Спасибо! Заявка отправлена.');f.reset()})});
+/* формы: отправка на почту через FormSubmit */
 
 ;
 
@@ -671,4 +671,50 @@ document.addEventListener('click', function(e){
 });
 document.getElementById('cClose').addEventListener('click', close);
 document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && m.classList.contains('on')) close(); });
+})();
+
+/* ===== окно политики конфиденциальности ===== */
+(function(){
+  var pm = document.getElementById('policyModal'); if (!pm) return;
+  var last = null;
+  function openP(btn){ last = btn || null; pm.classList.add('on'); document.body.style.overflow = 'hidden';
+    var c = document.getElementById('pClose'); if (c) c.focus(); }
+  function closeP(){ pm.classList.remove('on'); document.body.style.overflow = ''; if (last && last.focus) last.focus(); }
+  document.addEventListener('click', function(e){
+    var t = e.target && e.target.closest ? e.target.closest('[data-policy]') : null;
+    if (t) { e.preventDefault(); openP(t); return; }
+    if (e.target === pm) closeP();
+  });
+  var c = document.getElementById('pClose'); if (c) c.addEventListener('click', closeP);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && pm.classList.contains('on')) closeP(); });
+  if (location.hash === '#policy') openP(null);
+})();
+
+/* ===== отправка форм на почту ===== */
+(function(){
+  var AJAX = 'https://formsubmit.co/ajax/denisdubrovskij09@gmail.com';
+  function st(f, text, cls){ var p = f.querySelector('.form-status'); if (!p) return;
+    p.textContent = text || ''; p.className = 'form-status wide' + (cls ? ' ' + cls : ''); }
+  ['cbform','evform','subform'].forEach(function(id){
+    var f = document.getElementById(id); if (!f) return;
+    f.addEventListener('submit', function(e){
+      if (f.checkValidity && !f.checkValidity()) return;   /* браузер сам покажет, что не заполнено */
+      e.preventDefault();
+      st(f, 'Отправляем…');
+      var data = new FormData(f);
+      fetch(AJAX, { method: 'POST', headers: { 'Accept': 'application/json' }, body: data })
+        .then(function(r){ return r.text(); })
+        .then(function(txt){
+          var j = {}; try { j = JSON.parse(txt); } catch (err) {}
+          if (j && (j.success === true || j.success === 'true')) {
+            st(f, 'Спасибо! Сообщение отправлено — ответим на указанную почту.', 'ok');
+            f.reset();
+          } else {
+            st(f, (j && j.message) ? j.message : 'Отправляем напрямую…');
+            f.submit();                                    /* запасной путь: обычная отправка формы */
+          }
+        })
+        .catch(function(){ st(f, 'Отправляем напрямую…'); f.submit(); });
+    });
+  });
 })();

@@ -3040,3 +3040,18 @@ box-shadow:0 2px 8px rgba(0,0,0,.25);transition:transform .18s ease}
 .folk-bar i{position:absolute;top:0;bottom:0;left:0;width:0;border-radius:3px;background:#D4A843}
 .folk-time{font-size:11.5px;color:var(--mut);font-variant-numeric:tabular-nums}
 .folk-note{font-size:12.5px;color:var(--mut);margin:8px 0 0}
+
+/* обратная связь, согласие, окно политики */
+.wide{grid-column:1/-1}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px;line-height:1.5;cursor:pointer}
+.check input{flex:0 0 auto;width:20px;height:20px;margin:2px 0 0;accent-color:var(--gold,#C8A05A)}
+.check a{color:inherit;text-decoration:underline}
+.form-status{margin:0;font-size:14px;line-height:1.5}
+.form-status.ok{color:#2E7D32}
+.form-status.err{color:#B3261E}
+.hp{position:absolute!important;left:-9999px!important;width:1px!important;height:1px;opacity:0;pointer-events:none}
+.policy h4{margin:18px 0 6px;font-size:16px}
+.policy p,.policy li{font-size:15px;line-height:1.6}
+.policy ul{margin:6px 0 6px 20px;padding:0}
+.policy a{color:inherit}
+@media(max-width:720px){.policy h4{margin:14px 0 4px}}
