@@ -718,3 +718,40 @@ document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && m.cl
     });
   });
 })();
+
+/* ===== почта только на gmail.com, yandex.ru, mail.ru ===== */
+(function(){
+  var ALLOWED = ['gmail.com', 'yandex.ru', 'mail.ru'];
+  var HINT = 'Почта должна быть на gmail.com, yandex.ru или mail.ru';
+  function domain(v){
+    v = (v || '').trim().toLowerCase();
+    var i = v.lastIndexOf('@');
+    return i > -1 ? v.slice(i + 1) : '';
+  }
+  ['cbform', 'evform'].forEach(function(id){
+    var f = document.getElementById(id); if (!f) return;
+    var m = f.querySelector('input[type="email"]'); if (!m) return;
+    var p = f.querySelector('.form-status');
+    function msg(text, cls){
+      if (!p) return;
+      p.textContent = text || '';
+      p.className = 'form-status wide' + (cls ? ' ' + cls : '');
+    }
+    function check(show){
+      var v = (m.value || '').trim();
+      if (!v) { m.setCustomValidity(''); if (show) msg('', ''); return true; }
+      if (ALLOWED.indexOf(domain(v)) === -1) {
+        m.setCustomValidity(HINT);
+        if (show) msg(HINT, 'err');
+        return false;
+      }
+      m.setCustomValidity('');
+      if (show) msg('', '');
+      return true;
+    }
+    m.addEventListener('input', function(){ check(false); });
+    m.addEventListener('blur', function(){ check(true); });
+    m.addEventListener('invalid', function(){ check(true); });
+    f.addEventListener('submit', function(){ check(true); });
+  });
+})();
