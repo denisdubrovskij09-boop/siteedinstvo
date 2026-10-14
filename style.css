@@ -1,0 +1,3042 @@
+/* набор lawx, встроен для работы файла без хостинга */
+/* The four surface tokens the theme and the AMOLED/raised switch swap. A custom property
+   only interpolates once registered with a type, so these four are declared as colors and
+   glided by the :root transition below; without @property the swap is instant. */
+@property --ui-bg {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #f5f5f5;
+}
+@property --ui-card {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #ffffff;
+}
+@property --ui-card-raised {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #ffffff;
+}
+@property --ui-material {
+  syntax: '<color>';
+  inherits: true;
+  initial-value: #ffffff;
+}
+
+:root {
+  transition:
+    --ui-bg 0.32s var(--ui-ease),
+    --ui-card 0.32s var(--ui-ease),
+    --ui-card-raised 0.32s var(--ui-ease),
+    --ui-material 0.32s var(--ui-ease);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    transition: none;
+  }
+}
+
+/* Neutral greys, the browser chat's: no cool cast, and the fills are ink laid over whatever
+   they sit on, so a plate is always a step darker than its own ground. */
+:root {
+  --ui-bg: #f5f5f5;
+  --ui-card: #ffffff;
+  --ui-card-raised: #ffffff;
+  --ui-text: #121212;
+  --ui-text-2: #3d3d3d;
+  --ui-hint: #6b6b6b;
+  --ui-section-header: #6b6b6b;
+  --ui-separator: rgba(0, 0, 0, 0.08);
+
+  /* Flat accents use the exact lower endpoint of the hero gradient. */
+  --ui-accent: #3d7afe;
+  --ui-accent-strong: #2961f1;
+  --ui-accent-fill: var(--ui-accent);
+  --ui-accent-fill-strong: var(--ui-accent-strong);
+  --ui-accent-text: #ffffff;
+  --ui-accent-soft: rgba(61, 122, 254, 0.1);
+  --ui-accent-grad-stops:
+    #1225d7 0%,
+    #1334dc 25%,
+    #1a49e6 50%,
+    #2961f1 75%,
+    #3d7afe 100%;
+  --ui-accent-grad: linear-gradient(180deg, var(--ui-accent-grad-stops));
+  --ui-accent-sheen-1: #7c9dff;
+  --ui-accent-sheen-2: #93a7ff;
+  --ui-pro: #823bf5;
+  /* Pro as words and outlines: the fill is too faint for text on either ground. */
+  --ui-pro-ink: color-mix(in srgb, var(--ui-pro) 92%, #000);
+  /* System fills lack text contrast on light cards; foregrounds use the matching ink. */
+  --ui-destructive: #ff383c;
+  --ui-destructive-ink: #e9152d;
+  --ui-confirm: #34c759;
+  --ui-confirm-ink: #008932;
+  --ui-star: #ff8d28;
+  --ui-star-ink: #c55300;
+
+  --ui-group-web: #007aff;
+  --ui-group-sites: #5856d6;
+  --ui-group-make: #af52de;
+  --ui-group-files: var(--ui-confirm-ink);
+  --ui-group-you: var(--ui-star-ink);
+
+  --ui-fill: rgba(0, 0, 0, 0.04);
+  --ui-fill-2: rgba(0, 0, 0, 0.065);
+  --ui-fill-3: rgba(0, 0, 0, 0.1);
+
+  --ui-skel-sheen: rgba(255, 255, 255, 0.55);
+
+  --ui-skel-shine: linear-gradient(
+    100deg,
+    transparent 8%,
+    color-mix(in srgb, var(--ui-skel-sheen) 22%, transparent) 30%,
+    var(--ui-skel-sheen) 50%,
+    color-mix(in srgb, var(--ui-skel-sheen) 22%, transparent) 70%,
+    transparent 92%
+  );
+
+  /* dialog material (Alert/ActionSheet): opaque by design — WebKit suspends backdrop blur
+     while a transform animates, so translucent glass pops in at the end of the slide. */
+  --ui-material: #ffffff;
+  --ui-glass-edge: rgba(255, 255, 255, 0.7);
+  --ui-glass-edge-2: rgba(255, 255, 255, 0.35);
+  --ui-material-btn: rgba(0, 0, 0, 0.055);
+  --ui-material-btn-edge: rgba(0, 0, 0, 0.08);
+
+  /* A resting surface stands off its ground by an edge, never by a lighter grey: a hairline
+     ring here, plus a lit top edge in the dark sets. Half a CSS pixel is one device pixel on
+     a dense screen; a coarse screen keeps the whole one (below). */
+  --ui-hairline: 0.5px;
+  --ui-card-edge: inset 0 0 0 var(--ui-hairline) var(--ui-separator);
+  /* What floats over the page (a menu, a popover, a toast, a sheet) is the same material,
+     lifted by this edge and its shadow rather than by a lighter grey. */
+  --ui-pop-edge: inset 0 0 0 var(--ui-hairline) var(--ui-separator);
+  /* A plate inside a surface (an icon tile, a meter's track). In the dark sets a fill would
+     read as a second, lighter material there, so it is a breath of ink instead. */
+  --ui-fill-faint: var(--ui-fill);
+
+  /* elevation — three steps, and height is told by DISTANCE, not by darkness:
+       1 — resting: sits on the page (a tile, the composer island, a knob, a control)
+       2 — lifted: hangs off a trigger, or rises under the pointer (menus, popovers)
+       3 — floating: off the page altogether (dialogs, a window, a dragged row) */
+  --ui-shadow-1:
+    0 1px 2px rgba(23, 23, 23, 0.05),
+    0 2px 8px rgba(23, 23, 23, 0.06);
+  --ui-shadow-2:
+    0 2px 5px rgba(23, 23, 23, 0.06),
+    0 6px 16px rgba(23, 23, 23, 0.08);
+  --ui-shadow-3:
+    0 4px 9px rgba(23, 23, 23, 0.07),
+    0 12px 28px -4px rgba(23, 23, 23, 0.1);
+
+  /* layers — the only place a stacking number is written, and the steps are ROLES: an app
+     names the role its surface plays instead of inventing a number. 80 is the line the guard
+     draws (tests/test_webapp_layers.py): at or above it a surface claims the shared
+     body-level band and must take a role from this block, below it an app is sealed in its
+     own root. Order inside one role comes from mount order, never from a new number. */
+  --ui-z-raised: 1;
+  --ui-z-sticky: 20;
+  --ui-z-scrim: 40;
+  --ui-z-cta: 50;
+  --ui-z-panel: 60;
+  --ui-z-window: 80;
+  --ui-z-popover: 90;
+  --ui-z-dialog: 100;
+  --ui-z-viewer: 110;
+  /* A menu, a popover, a sheet or a tip opened FROM the viewer: --ui-z-popover stands one
+     role UNDER the viewer, which is where such a panel would be lost behind the picture. */
+  --ui-z-viewer-popover: 115;
+  /* The photo viewer's ground, the same in both themes; a phone paints its strips from it
+  (theme-color) while the viewer is up. */
+  --ui-viewer-ground: #040508;
+  /* The board under a picture with transparency — two neutral greys, restated for the dark
+     sets so it reads as a board there instead of glowing through the picture. */
+  --ui-checker: repeating-conic-gradient(#e5e5e5 0% 25%, #f6f6f6 0% 50%) 0 0 / 16px 16px;
+  /* Above the dialog on purpose: a file dragged over an open Popup still uploads. */
+  --ui-z-drop: 120;
+  --ui-z-toast: 130;
+  --ui-z-debug: 140;
+
+  --ui-hover: rgba(61, 122, 254, 0.05);
+  --ui-press: rgba(61, 122, 254, 0.1);
+
+  --ui-radius-card: 22px;
+  --ui-radius-field: 14px;
+  --ui-radius-pill: 999px;
+  --ui-radius-dialog: 30px;
+
+  /* density — the phone-first size scale, restated as a whole by the compact cut below.
+     Set per app via data-density="compact" on <html>; Mini Apps never set it. */
+  --ui-font-title: 30px;
+  --ui-font-nav: 22px;
+  --ui-font-dialog: 17px;
+  --ui-font-body: 17px;
+  --ui-font-callout: 16px;
+  --ui-font-sub: 15px;
+  --ui-font-note: 14px;
+  --ui-font-footnote: 13.5px;
+  /* Running secondary copy: unlike --ui-font-label it does not drop in the compact cut. */
+  --ui-font-caption: 13px;
+  --ui-font-label: 13px;
+  --ui-row-h: 54px;
+  --ui-row-pad: 13px 18px;
+  --ui-row-top:18px;right:18px;bottom:18px;left:18px;
+  --ui-field-pad: 15px 18px;
+  --ui-control-h: 40px;
+  --ui-control-h-sm: 36px;
+  --ui-cta-h: 52px;
+  --ui-icon-button: 38px;
+  --ui-dialog-act-h: 50px;
+  /* iOS UISwitch geometry; the throw is derived in ui.css, so the compact cut only
+     restates these three. */
+  --ui-switch-w: 51px;
+  --ui-switch-h: 31px;
+  --ui-switch-knob: 27px;
+
+  /* "Onest" resolves to the shared webfont the backend injects into every document; the
+     system stack behind it only covers a document served without the faces. */
+  --ui-font:
+    "Onest", system-ui, -apple-system, BlinkMacSystemFont, "Roboto",
+    "Helvetica Neue", "Segoe UI", Arial, sans-serif;
+
+  --ui-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ui-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ui-ease-nav: cubic-bezier(0.33, 1, 0.68, 1);
+  /* The curve iOS presents and dismisses its sheets on: quick off the mark, long soft landing. */
+  --ui-ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+  --ui-ease-spring: cubic-bezier(0, 0.9, 0.5, 1.35);
+  --ui-ease-toggle: cubic-bezier(0.34, 1.45, 0.64, 1);
+  /* Four springs sampled from SwiftUI .spring(duration:bounce:) (zeta = 1 - bounce,
+     omega = 2*pi/duration; generator: docs/design/motion-review-2026-08/springs.py). A
+     bezier can overshoot once but never settle, so these are stand-ins and the @supports
+     block below replaces them with the sampled linear() curves. */
+  --ui-spring-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+  --ui-spring-snappy: cubic-bezier(0.34, 1.2, 0.64, 1);
+  --ui-spring-bouncy: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ui-spring-press: cubic-bezier(0.34, 1.7, 0.64, 1);
+  --ui-dur: 0.18s;
+  /* A press lands at once (0s on :active); this is only its release. */
+  --ui-dur-press: 0.08s;
+  --ui-dur-toggle: 0.3s;
+  --ui-dur-screen: 0.42s;
+
+  --ui-safe-top: 0px;
+  --ui-safe-bottom: 0px;
+  /* phone-fullscreen top reserve only (0 in windowed mode); drives the edge scrim */
+  --ui-fullscreen-top: 0px;
+  /* The top scrim runs 1.5x that reserve; add this to any top offset that has to clear it. */
+  --ui-scrim-clear: min(var(--ui-fullscreen-top), 26px);
+  /* on-screen keyboard inset (set from JS via visualViewport), published once the resize
+     burst is over so a LAYOUT built from it is rebuilt once. */
+  --ui-keyboard: 0px;
+  /* The same inset this frame, undebounced: for a surface that RIDES the keys on a
+     transform. A layout must not be built from it. */
+  --ui-keyboard-live: 0px;
+  /* measured fixed CTA bar height; falls back in CSS before CtaBar mounts */
+  --ui-cta-bar-height: 84px;
+}
+
+@media (max-resolution: 1.5dppx) {
+  :root {
+    --ui-hairline: 1px;
+  }
+}
+
+/* linear() lands in Safari 17.2 / Chrome 113 / Firefox 112; the WAAPI `easing`
+   option takes the same string. */
+@supports (animation-timing-function: linear(0, 1)) {
+  :root {
+    --ui-spring-smooth: linear(0, 0.01112, 0.04013, 0.08161, 0.1313, 0.186, 0.2431, 0.3008, 0.3577, 0.4129, 0.4656, 0.5154, 0.562, 0.6053, 0.6452, 0.6819, 0.7154, 0.7459, 0.7736, 0.7985, 0.821, 0.8412, 0.8594, 0.8756, 0.89, 0.9029, 0.9144, 0.9246, 0.9336, 0.9416, 0.9487, 0.9549, 0.9605, 0.9653, 0.9696, 0.9734, 0.9767, 0.9796, 0.9822, 0.9844, 1);
+    --ui-spring-snappy: linear(0, 0.02429, 0.08498, 0.1673, 0.2604, 0.3564, 0.4501, 0.5378, 0.6177, 0.6886, 0.7503, 0.803, 0.8472, 0.8839, 0.9137, 0.9376, 0.9564, 0.9711, 0.9822, 0.9904, 0.9964, 1.001, 1.003, 1.005, 1.006, 1.006, 1.006, 1.006, 1.005, 1.005, 1.004, 1.004, 1.003, 1.003, 1.002, 1.002, 1.001, 1.001, 1.001, 1.001, 1);
+    --ui-spring-bouncy: linear(0, 0.02483, 0.08858, 0.1773, 0.2799, 0.3875, 0.4937, 0.5939, 0.6851, 0.7654, 0.8343, 0.8916, 0.9378, 0.9741, 1.001, 1.021, 1.034, 1.042, 1.045, 1.046, 1.044, 1.041, 1.036, 1.031, 1.027, 1.022, 1.017, 1.013, 1.01, 1.007, 1.004, 1.002, 1.001, 0.9996, 0.9988, 0.9983, 0.998, 0.9979, 0.9979, 0.998, 1);
+    --ui-spring-press: linear(0, 0.02501, 0.08984, 0.1809, 0.2869, 0.3989, 0.5099, 0.615, 0.7107, 0.7949, 0.8666, 0.9258, 0.9729, 1.009, 1.035, 1.052, 1.063, 1.067, 1.068, 1.065, 1.059, 1.053, 1.045, 1.037, 1.03, 1.023, 1.017, 1.012, 1.007, 1.003, 1.001, 0.9985, 0.997, 0.9961, 0.9955, 0.9954, 0.9955, 0.9957, 0.9962, 0.9966, 1);
+  }
+}
+
+/* Compact density — the full-window desktop cut. Set per app on <html>, never by a viewport
+   media query in the kit: a Mini App in a widened Telegram desktop panel stays phone-density. */
+[data-density='compact'] {
+  --ui-radius-card: 16px;
+  --ui-radius-field: 12px;
+  --ui-radius-dialog: 20px;
+  --ui-font-title: 24px;
+  --ui-font-nav: 19px;
+  --ui-font-dialog: 16px;
+  --ui-font-body: 15px;
+  --ui-font-callout: 14.5px;
+  --ui-font-sub: 14px;
+  --ui-font-note: 13px;
+  --ui-font-footnote: 12.5px;
+  --ui-font-label: 12px;
+  --ui-row-h: 44px;
+  --ui-row-pad: 10px 14px;
+  --ui-row-top:14px;right:14px;bottom:14px;left:14px;
+  --ui-field-pad: 12px 14px;
+  --ui-control-h: 36px;
+  --ui-control-h-sm: 32px;
+  --ui-cta-h: 44px;
+  --ui-icon-button: 34px;
+  --ui-dialog-act-h: 44px;
+  --ui-switch-w: 44px;
+  --ui-switch-h: 26px;
+  --ui-switch-knob: 22px;
+  /* --ui-cta-h 44px + the bar's 2x16px padding. */
+  --ui-cta-bar-height: 76px;
+}
+
+[data-theme='dark'] {
+  --ui-bg: #000000;
+  /* Cards, sheets and dialogs are one material a shade off black, held by their edge; a
+     lighter grey for a higher layer read as plastic. */
+  --ui-card: #121212;
+  --ui-card-raised: #252525;
+  /* Not paper white: #fafafa on black haloed. The three inks step evenly in lightness. */
+  --ui-text: #ededed;
+  --ui-text-2: #bababa;
+  /* Both secondary inks are set by the hardest ground they land on: a step darker and
+     either drops under 4.5:1 there. */
+  --ui-hint: #8c8c8c;
+  --ui-section-header: #8c8c8c;
+  --ui-separator: rgba(166, 166, 166, 0.2);
+
+  --ui-accent: #3d7afe;
+  --ui-accent-strong: #5688ff;
+  --ui-accent-fill: var(--ui-accent);
+  --ui-accent-fill-strong: var(--ui-accent-strong);
+  --ui-accent-soft: rgba(61, 122, 254, 0.2);
+  /* In the key of the picked accents (OKLCH L .70, C .14) rather than the system's neon; the
+     red fill stays deep enough to carry white words. */
+  --ui-destructive: #e5484d;
+  --ui-destructive-ink: #e97871;
+  --ui-confirm: #4fb772;
+  --ui-confirm-ink: #4fb772;
+  --ui-star: #efb146;
+  --ui-star-ink: #efb146;
+  --ui-pro-ink: color-mix(in srgb, var(--ui-pro) 75%, #fff);
+
+  --ui-group-web: #0a84ff;
+  --ui-group-sites: #5e5ce6;
+  --ui-group-make: #bf5af2;
+  --ui-group-files: var(--ui-confirm-ink);
+  --ui-group-you: var(--ui-star-ink);
+
+  --ui-fill: rgba(166, 166, 166, 0.13);
+  --ui-fill-2: rgba(166, 166, 166, 0.2);
+  --ui-fill-3: rgba(166, 166, 166, 0.28);
+
+  --ui-skel-sheen: rgba(255, 255, 255, 0.07);
+
+  --ui-checker: repeating-conic-gradient(#232326 0% 25%, #303034 0% 50%) 0 0 / 16px 16px;
+
+  --ui-material: #121212;
+  --ui-glass-edge: rgba(255, 255, 255, 0.3);
+  --ui-glass-edge-2: rgba(255, 255, 255, 0.12);
+  --ui-material-btn: rgba(166, 166, 166, 0.3);
+  --ui-material-btn-edge: rgba(206, 206, 206, 0.16);
+
+  --ui-shadow-1:
+    0 1px 2px rgba(0, 0, 0, 0.22),
+    0 2px 8px rgba(0, 0, 0, 0.18);
+  --ui-shadow-2:
+    0 2px 5px rgba(0, 0, 0, 0.26),
+    0 8px 20px rgba(0, 0, 0, 0.2);
+  --ui-shadow-3:
+    0 4px 9px rgba(0, 0, 0, 0.3),
+    0 14px 32px -4px rgba(0, 0, 0, 0.24);
+
+  --ui-hover: rgba(61, 122, 254, 0.1);
+  --ui-press: rgba(61, 122, 254, 0.18);
+
+  --ui-card-edge:
+    inset 0 1px 0 color-mix(in srgb, var(--ui-text) 6%, transparent),
+    inset 0 0 0 var(--ui-hairline) color-mix(in srgb, var(--ui-text) 14%, transparent);
+  --ui-pop-edge:
+    inset 0 1px 0 color-mix(in srgb, var(--ui-text) 10%, transparent),
+    0 0 0 1px color-mix(in srgb, var(--ui-text) 20%, transparent);
+  --ui-fill-faint: color-mix(in srgb, var(--ui-text) 6%, transparent);
+}
+
+/* [data-surface] is the user's choice (default: AMOLED on phones, raised elsewhere) —
+   written by applySafeArea and, pre-paint, by each webapp's index.html; without it the
+   AMOLED set stands. The browser chat always paints this set. */
+[data-theme='dark'][data-surface='raised'] {
+  --ui-bg: #0d0d0d;
+}
+
+@font-face{font-family:'Onest';font-style:normal;font-display:swap;font-weight:100 900;src:url('fonts/ui/onest-var-latin-cyrillic.woff2?v=cb125acfae07') format('woff2-variations')}@font-face{font-family:'Onest';font-style:normal;font-display:swap;font-weight:100 900;src:url('fonts/ui/lawxics-mark.woff2?v=9c262a07c46b') format('woff2');unicode-range:U+1FA99}@font-face{font-family:'SF Mono';font-style:normal;font-display:swap;font-weight:400;src:url('fonts/ui/sf-mono-latin-cyrillic-regular.woff2?v=b3356374923e') format('woff2')}@font-face{font-family:'SF Mono';font-style:normal;font-display:swap;font-weight:600;src:url('fonts/ui/sf-mono-latin-cyrillic-semibold.woff2?v=0b30beb945ea') format('woff2')}
+/* The component layer of the stock site look. Served as the tail of images/kit-ui.css, after
+   apps/ui/src/styles/tokens.css verbatim and the generated @font-face pair, so every value
+   here is a var(--ui-*). Colour literals live in exactly two marked places: the chat-web
+   light palette between the `palette` markers and the six `--sa*` accent pairs; everything
+   else paints with a token, and #000/#fff appear only as color-mix anchors.
+
+   Three things differ from apps/ui/src/styles/ui.css on purpose: a site is a document, not
+   an app shell (the scrollbar stays visible, text stays selectable, nothing is portaled);
+   no script writes --ui-safe-*, so the safe area comes from env() directly; and there is no
+   screen-slide layer, because a site navigates by real page loads.
+
+   Class names are a PUBLIC contract: a model reading core/builtin_skills/site_design/ writes
+   them into pages that are published and never rebuilt. Add a class; never rename one.
+   tests/test_site_design_skill.py holds both halves of that contract. */
+
+/* ---------- palette: the browser chat's light set, and its monochrome accent ---------- */
+
+/* Copies of apps/chat-web/src/styles/tokens.css, kept equal by token name; the dark set is
+   the kit's own AMOLED set, which the chat also paints. */
+/* palette: chat-web light */
+:root:not([data-theme='dark']) {
+  --ui-bg: #fafafa;
+  --ui-card: #ffffff;
+  --ui-material: #f9f9f9;
+  --ui-text: #121212;
+  --ui-text-2: #3d3d3d;
+  --ui-hint: #6b6b6b;
+  --ui-section-header: #707070;
+  --ui-separator: rgba(0, 0, 0, 0.08);
+  --ui-fill: rgba(0, 0, 0, 0.04);
+  --ui-fill-2: rgba(0, 0, 0, 0.065);
+  --ui-fill-3: rgba(0, 0, 0, 0.1);
+  --ui-material-btn: rgba(0, 0, 0, 0.055);
+  --ui-material-btn-edge: rgba(0, 0, 0, 0.08);
+  --ui-shadow-1:
+    0 1px 2px rgba(23, 23, 23, 0.05),
+    0 2px 8px rgba(23, 23, 23, 0.06);
+  --ui-shadow-2:
+    0 2px 5px rgba(23, 23, 23, 0.06),
+    0 6px 16px rgba(23, 23, 23, 0.08);
+  --ui-shadow-3:
+    0 4px 9px rgba(23, 23, 23, 0.07),
+    0 12px 28px -4px rgba(23, 23, 23, 0.1);
+  --ui-hover: rgba(20, 21, 26, 0.045);
+  --ui-press: rgba(20, 21, 26, 0.085);
+}
+
+[data-theme='dark'] {
+  --ui-hover: rgba(255, 255, 255, 0.05);
+  --ui-press: rgba(255, 255, 255, 0.1);
+}
+/* end palette */
+
+/* The accent family the kit tints with its blue is rebuilt monochrome: the text colour is the
+   fill, the page colour is the ink on it. A page that wants a colour names one in data-accent. */
+:root {
+  --ui-accent: var(--ui-text);
+  --ui-accent-fill: var(--ui-text);
+  --ui-accent-text: #fff;
+  --ui-accent-soft: var(--ui-fill);
+  --ui-accent-strong: var(--ui-text-2);
+  --ui-accent-fill-strong: var(--ui-accent-strong);
+  --ui-accent-sheen-1: color-mix(in srgb, var(--ui-text) 62%, #fff);
+  --ui-accent-sheen-2: color-mix(in srgb, var(--ui-text) 80%, #fff);
+  --ui-accent-grad-stops:
+    color-mix(in srgb, var(--ui-text) 74%, #000) 0%,
+    var(--ui-text) 100%;
+}
+
+[data-theme='dark'] {
+  --ui-accent-text: #000;
+  --ui-accent-sheen-1: color-mix(in srgb, var(--ui-text) 62%, #000);
+  --ui-accent-sheen-2: color-mix(in srgb, var(--ui-text) 80%, #000);
+}
+
+/* One pick, the whole family derived from it — the chat's own rebuild, with color-mix instead
+   of a second palette. --sa is the fill, --sa-ink the text/icon cut, --sa-on the glyph on it. */
+[data-accent] {
+  --ui-accent: var(--sa-ink);
+  --ui-accent-fill: var(--sa);
+  --ui-accent-text: var(--sa-on);
+  --ui-accent-soft: color-mix(in srgb, var(--sa) 10%, transparent);
+  --ui-accent-strong: color-mix(in srgb, var(--sa) 84%, #000);
+  --ui-accent-fill-strong: var(--ui-accent-strong);
+  --ui-accent-sheen-1: color-mix(in srgb, var(--sa) 62%, #fff);
+  --ui-accent-sheen-2: color-mix(in srgb, var(--sa) 80%, #fff);
+  --ui-accent-grad-stops:
+    color-mix(in srgb, var(--sa) 74%, #000) 0%,
+    var(--sa) 100%;
+}
+
+[data-theme='dark'][data-accent] {
+  --ui-accent: var(--sa);
+  --ui-accent-soft: color-mix(in srgb, var(--sa) 18%, transparent);
+  --ui-accent-strong: color-mix(in srgb, var(--sa) 84%, #fff);
+  --ui-accent-sheen-1: color-mix(in srgb, var(--sa) 62%, #000);
+  --ui-accent-sheen-2: color-mix(in srgb, var(--sa) 80%, #000);
+}
+
+[data-accent='blue'] { --sa: #488ff6; --sa-ink: #196ddd; --sa-on: #14161b; }
+[data-accent='green'] { --sa: #26a45a; --sa-ink: #1c8146; --sa-on: #14161b; }
+[data-accent='yellow'] { --sa: #dc8e0f; --sa-ink: #936919; --sa-on: #14161b; }
+[data-accent='pink'] { --sa: #f25697; --sa-ink: #cd2f78; --sa-on: #14161b; }
+[data-accent='orange'] { --sa: #f06423; --sa-ink: #be4d19; --sa-on: #14161b; }
+[data-accent='purple'] { --sa: #ae72f7; --sa-ink: #8f4fd7; --sa-on: #14161b; }
+
+/* Four hues the first six left out, and a low-chroma twin of each of those six. The six
+   were one ring — OKLCH L 0.700 C 0.140 in dark for every one of them, hue the only
+   difference — so a subject could pick a colour but never a character, and pages came out
+   the same page in six paints. Every value here is solved against the ground it lands on:
+   the ink against the page and against its own badge tint, the glyph against the fill, and
+   the dark fill against the raised surface, all at 4.5:1. */
+[data-accent='blue-soft'] { --sa: #637897; --sa-ink: #5b708e; --sa-on: #ffffff; }
+[data-accent='green-soft'] { --sa: #65876d; --sa-ink: #55765e; --sa-on: #14161b; }
+[data-accent='yellow-soft'] { --sa: #957b5c; --sa-ink: #846a4d; --sa-on: #14161b; }
+[data-accent='pink-soft'] { --sa: #946b78; --sa-ink: #8b6370; --sa-on: #ffffff; }
+[data-accent='orange-soft'] { --sa: #946e5f; --sa-ink: #8b6557; --sa-on: #ffffff; }
+[data-accent='purple-soft'] { --sa: #7e7093; --sa-ink: #76688a; --sa-on: #ffffff; }
+[data-accent='lime'] { --sa: #a5ca00; --sa-ink: #637917; --sa-on: #14161b; }
+[data-accent='aqua'] { --sa: #00f2e9; --sa-ink: #1a7d79; --sa-on: #14161b; }
+[data-accent='indigo'] { --sa: #6966e7; --sa-ink: #625ddd; --sa-on: #ffffff; }
+[data-accent='magenta'] { --sa: #c252bc; --sa-ink: #af40a9; --sa-on: #14161b; }
+
+[data-accent='mono'] { --sa: var(--ui-text); --sa-ink: var(--ui-text); --sa-on: #fff; }
+
+[data-theme='dark'][data-accent='blue'] { --sa: #659ff4; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='green'] { --sa: #4fb772; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='yellow'] { --sa: #efb146; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='pink'] { --sa: #e2769e; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='orange'] { --sa: #e67e54; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='purple'] { --sa: #af88e6; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='blue-soft'] { --sa: #778dac; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='green-soft'] { --sa: #71947a; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='yellow-soft'] { --sa: #a18768; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='pink-soft'] { --sa: #aa808d; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='orange-soft'] { --sa: #aa8373; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='purple-soft'] { --sa: #9385a9; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='lime'] { --sa: #a5ca00; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='aqua'] { --sa: #00f2e9; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='indigo'] { --sa: #7f83db; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='magenta'] { --sa: #d060c9; --sa-on: #14161b; }
+[data-theme='dark'][data-accent='mono'] { --sa-on: #000; }
+
+/* ---------- document ---------- */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  color-scheme: light;
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+html[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+/* The browser's own [hidden] loses to any class that sets display, so a hidden .ui-stats or
+   .ui-form stayed on screen; the attribute is what the script toggles panels with. */
+[hidden] {
+  display: none !important;
+}
+
+body {
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  margin: 0;
+  background: var(--ui-bg);
+  color: var(--ui-text);
+  font-family: var(--ui-font);
+  font-size: var(--ui-font-body);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+  overflow-x: clip;
+}
+
+/* A site keeps the scrollbar the kit hides; on a pointer device it is only slimmed down. */
+@media (pointer: fine) {
+  :root {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ui-fill-3) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: var(--ui-radius-pill);
+    background: var(--ui-fill-3);
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+img {
+  display: block;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: var(--ui-accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+hr {
+  height: 1px;
+  margin: 0;
+  border: 0;
+  background: var(--ui-separator);
+}
+
+:where(:focus-visible) {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--ui-accent) 26%, transparent);
+}
+
+main :where(h1, h2, h3, h4, p, ul, ol, figure) {
+  margin: 0;
+}
+
+/* ---------- containers ---------- */
+
+.ui-page {
+  width: min(100%, 560px);
+  margin: 0 auto;
+  flex: 1 0 auto;
+  padding: 20px max(16px, env(safe-area-inset-right)) calc(40px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+}
+
+.ui-page--wide {
+  width: min(100%, 1040px);
+}
+
+/* The page carries the gutter the kit puts on each card, so a grid, a hero or running text
+   dropped straight into it is not glued to the edge; the card therefore keeps none of its own. */
+.ui-card {
+  margin: 0;
+  overflow: hidden;
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-card);
+  box-shadow: var(--ui-card-edge);
+}
+
+/* `--min` is the tile's minimum width; `--cols` fixes the count on desktop (layout layer below). */
+.ui-grid {
+  display: grid;
+  gap: var(--ui-space-5, 24px);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--min, 240px)), 1fr));
+}
+
+.ui-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.ui-actions--center {
+  justify-content: center;
+}
+
+/* The hosting badge stands fixed in the bottom-right corner; the footer keeps that room. */
+.ui-footer {
+  flex: none;
+  padding: 24px 20px calc(76px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--ui-separator);
+  color: var(--ui-hint);
+  font-size: var(--ui-font-caption);
+  line-height: 1.4;
+  text-align: center;
+}
+
+.ui-footer a {
+  color: inherit;
+}
+
+/* ---------- sticky glass header ---------- */
+
+/* The light bar is a mix of the page's own ground rather than white — glass over a bright
+   ground subtracts light — with a gloss along the top edge, a lip under it and a cold contour
+   it stands on; the dark bar is denser and its gloss is a hint. Opaque without backdrop-filter. */
+.ui-nav {
+  position: sticky;
+  top: 0;
+  z-index: var(--ui-z-sticky);
+  padding-top: env(safe-area-inset-top);
+  background: var(--ui-bg);
+  box-shadow:
+    inset 0 1px 0 var(--ui-glass-edge),
+    inset 0 -1px 0 var(--ui-glass-edge-2),
+    0 0.5px 0 var(--ui-separator);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .ui-nav {
+    background: color-mix(in srgb, var(--ui-bg) 72%, transparent);
+    -webkit-backdrop-filter: blur(20px) saturate(1.6);
+    backdrop-filter: blur(20px) saturate(1.6);
+  }
+
+  [data-theme='dark'] .ui-nav {
+    background: color-mix(in srgb, var(--ui-bg) 86%, transparent);
+  }
+}
+
+.ui-nav-inner {
+  display: flex;
+  width: min(100%, var(--ui-container, 1040px));
+  min-height: 56px;
+  align-items: center;
+  gap: 14px;
+  margin: 0 auto;
+  padding: 0 max(var(--ui-gutter, 16px), env(safe-area-inset-right)) 0 max(var(--ui-gutter, 16px), env(safe-area-inset-left));
+}
+
+.ui-nav-brand {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  margin-right: auto;
+  color: var(--ui-text);
+  font-size: var(--ui-font-callout);
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.ui-nav-links {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.ui-nav-links::-webkit-scrollbar {
+  display: none;
+}
+
+.ui-nav-links a {
+  display: inline-flex;
+  height: 36px;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: var(--ui-radius-pill);
+  color: var(--ui-text-2);
+  font-size: var(--ui-font-sub);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background var(--ui-dur) var(--ui-ease),
+    color var(--ui-dur) var(--ui-ease);
+}
+
+@media (hover: hover) {
+  .ui-nav-links a:hover {
+    background: var(--ui-hover);
+    color: var(--ui-text);
+  }
+}
+
+.ui-nav-links a:active {
+  background: var(--ui-press);
+}
+
+.ui-nav-links a[aria-current='page'] {
+  background: var(--ui-fill);
+  color: var(--ui-text);
+}
+
+/* A phone has no room for a brand and three links at desktop pads: the row still scrolls, but
+   tighter pads keep the last link on screen instead of cut at the edge. */
+@media (max-width: 480px) {
+  .ui-nav-inner {
+    gap: 10px;
+  }
+
+  .ui-nav-links a {
+    padding: 0 10px;
+  }
+}
+
+/* ---------- headings ---------- */
+
+.ui-page-head {
+  padding: 8px 10px 18px;
+}
+
+.ui-page-title {
+  margin: 0;
+  font-size: var(--ui-font-title);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.ui-page-sub {
+  margin: 5px 0 0;
+  color: var(--ui-hint);
+  font-size: var(--ui-font-sub);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.ui-hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 36px 16px 28px;
+  text-align: center;
+}
+
+.ui-hero-emoji {
+  display: flex;
+  width: 144px;
+  height: 144px;
+  align-items: center;
+  justify-content: center;
+  font-size: 116px;
+  line-height: 1;
+  animation: ui-hero-emoji-in 0.5s var(--ui-ease-out) both;
+}
+
+/* The glyph may stand bare or in a wrapper; either way the raster ui.js puts in fills the box. */
+.ui-hero-emoji > * {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  animation: ui-hero-float 4s ease-in-out 0.5s infinite;
+}
+
+.ui-hero-emoji canvas,
+.ui-hero-emoji svg,
+.ui-hero-emoji img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Weight and leading are the site's own: the kit's flat 36px is a Mini App number. */
+.ui-hero-title {
+  margin: 16px 0 0;
+  max-width: min(18ch, 100%);
+  color: var(--ui-text);
+  font-size: clamp(30px, 7vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+  overflow-wrap: anywhere;
+  animation: ui-hero-rise 0.42s var(--ui-ease-out) 0.06s both;
+}
+
+.ui-hero-sub {
+  margin: 12px 0 0;
+  max-width: min(36ch, 100%);
+  overflow-wrap: anywhere;
+  color: var(--ui-hint);
+  font-size: var(--ui-font-callout);
+  line-height: 1.4;
+  animation: ui-hero-rise 0.42s var(--ui-ease-out) 0.12s both;
+}
+
+.ui-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+  animation: ui-hero-rise 0.42s var(--ui-ease-out) 0.18s both;
+}
+
+@keyframes ui-hero-emoji-in {
+  from {
+    opacity: 0;
+    transform: scale(0.5) translateY(10px);
+  }
+}
+
+@keyframes ui-hero-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+@keyframes ui-hero-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* ---------- sections, cards, rows ---------- */
+
+.ui-section {
+  margin-bottom: 24px;
+}
+
+.ui-section-header {
+  display: block;
+  margin: 0 0 9px;
+  padding: 0 10px;
+  color: var(--ui-section-header);
+  font-size: var(--ui-font-label);
+  font-weight: 510;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+.ui-section-footer {
+  display: block;
+  margin: 9px 0 0;
+  padding: 0 10px;
+  color: var(--ui-hint);
+  font-size: var(--ui-font-caption);
+  line-height: 1.35;
+}
+
+.ui-section-footer a {
+  color: var(--ui-accent);
+  text-decoration: none;
+  transition: opacity var(--ui-dur) var(--ui-ease);
+}
+
+.ui-section-footer a:active {
+  opacity: 0.55;
+}
+
+.ui-row {
+  position: relative;
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 14px;
+  min-height: var(--ui-row-h);
+  padding: var(--ui-row-pad);
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  text-decoration: none;
+}
+
+/* The hairline between two rows is INSET, held off the left edge by the row's own inset;
+   run edge to edge it reads as a lit edge at the card's rounded corner. */
+.ui-row + .ui-row::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--ui-row-inset);
+  right: 0;
+  height: 1px;
+  background: var(--ui-separator);
+  transform: scaleY(0.5);
+  transform-origin: top;
+  transition: opacity var(--ui-dur) var(--ui-ease);
+}
+
+.ui-row--interactive {
+  min-height: max(44px, var(--ui-row-h));
+  cursor: pointer;
+}
+
+.ui-row--interactive::after {
+  content: '';
+  position: absolute;
+  top:0;right:0;bottom:0;left:0;
+  background: var(--ui-press);
+  opacity: 0;
+  transition: opacity var(--ui-dur) var(--ui-ease);
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .ui-row--interactive:hover::after {
+    background: var(--ui-hover);
+    opacity: 1;
+  }
+
+  .ui-row--interactive:hover::before,
+  .ui-row--interactive:hover + .ui-row::before {
+    opacity: 0;
+  }
+}
+
+.ui-row--interactive:active::after {
+  background: var(--ui-press);
+  opacity: 1;
+}
+
+.ui-row--interactive:active::before,
+.ui-row--interactive:active + .ui-row::before {
+  opacity: 0;
+}
+
+.ui-row-before,
+.ui-row-body,
+.ui-row-after {
+  position: relative;
+  z-index: 1;
+}
+
+.ui-row-before {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  color: var(--ui-accent);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.ui-row-body {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ui-row-overline {
+  color: var(--ui-hint);
+  font-size: var(--ui-font-label);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.ui-row-title {
+  color: var(--ui-text);
+  font-size: var(--ui-font-body);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.ui-row--accent .ui-row-title {
+  color: var(--ui-accent);
+}
+
+.ui-row--destructive .ui-row-title {
+  color: var(--ui-destructive-ink);
+}
+
+.ui-row-subtitle {
+  color: var(--ui-hint);
+  font-size: var(--ui-font-footnote);
+  font-weight: 400;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+
+.ui-row-after {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 8px;
+  color: var(--ui-hint);
+  font-size: var(--ui-font-body);
+  white-space: nowrap;
+}
+
+/* A price never breaks in two: "280" over "₽" is what a badge beside it produced on a phone. */
+.ui-row-value {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 6px;
+  color: var(--ui-text);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ui-card > .ui-chips {
+  padding: 14px 18px 16px;
+}
+
+/* ---------- tiles ---------- */
+
+.ui-tile {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-card);
+  color: inherit;
+  text-decoration: none;
+  transition:
+    transform var(--ui-dur) var(--ui-ease),
+    box-shadow var(--ui-dur) var(--ui-ease);
+}
+
+/* An empty media slot is the finished look, not a placeholder: a page ships without a picture
+   and still reads as complete. */
+.ui-tile-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--ui-fill);
+}
+
+.ui-tile-media > img,
+.ui-tile-media > video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A slot still waiting for its picture stays a low band rather than a tall grey block. */
+.ui-tile-media:not(:has(img, video, picture, svg, canvas, iframe)) {
+  aspect-ratio: 2 / 1;
+}
+
+.ui-tile-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px 16px;
+}
+
+.ui-tile-title {
+  margin: 0;
+  color: var(--ui-text);
+  font-size: var(--ui-font-callout);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.ui-tile-text {
+  margin: 0;
+  color: var(--ui-hint);
+  font-size: var(--ui-font-sub);
+  line-height: 1.4;
+}
+
+.ui-tile-foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 10px;
+}
+
+a.ui-tile,
+.ui-tile--interactive {
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  a.ui-tile:hover,
+  .ui-tile--interactive:hover {
+    box-shadow: var(--ui-shadow-2);
+  }
+}
+
+a.ui-tile:active,
+.ui-tile--interactive:active {
+  transform: scale(0.985);
+}
+
+/* ---------- buttons ---------- */
+
+.ui-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--ui-control-h);
+  padding: 0 20px;
+  border: 0;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-accent-fill);
+  color: var(--ui-accent-text);
+  cursor: pointer;
+  font-family: var(--ui-font);
+  font-size: var(--ui-font-sub);
+  font-weight: 600;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background var(--ui-dur) var(--ui-ease),
+    transform var(--ui-dur) var(--ui-ease),
+    opacity var(--ui-dur) var(--ui-ease);
+}
+
+@media (hover: hover) {
+  .ui-button:hover:not(:disabled) {
+    background: var(--ui-accent-fill-strong);
+  }
+}
+
+.ui-button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.ui-button:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.ui-button--large {
+  width: 100%;
+  height: var(--ui-cta-h);
+  font-size: var(--ui-font-body);
+}
+
+.ui-button--large:disabled {
+  opacity: 1;
+  background: color-mix(in srgb, var(--ui-text) 9%, var(--ui-bg));
+  color: color-mix(in srgb, var(--ui-text) 36%, var(--ui-bg));
+}
+
+.ui-button--tinted {
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent);
+}
+
+.ui-button--ghost {
+  background: transparent;
+  color: var(--ui-text);
+}
+
+.ui-button--destructive {
+  background: var(--ui-destructive);
+  color: #fff;
+}
+
+.ui-button--destructive-tinted {
+  background: color-mix(in srgb, var(--ui-destructive) 13%, transparent);
+  color: var(--ui-destructive-ink);
+}
+
+@media (hover: hover) {
+  .ui-button--tinted:hover:not(:disabled) {
+    background: var(--ui-accent-soft);
+    filter: brightness(0.96);
+  }
+
+  .ui-button--ghost:hover:not(:disabled) {
+    background: var(--ui-fill);
+  }
+
+  .ui-button--destructive:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--ui-destructive) 88%, #000);
+  }
+
+  .ui-button--destructive-tinted:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--ui-destructive) 13%, transparent);
+    filter: brightness(0.96);
+  }
+}
+
+.ui-button .ui-icon {
+  font-size: 1.15em;
+}
+
+/* The one main button of a page, in a sheen ring that breathes at a steps() cadence. */
+.ui-cta {
+  position: relative;
+  display: inline-flex;
+  padding: 1.6px;
+  border-radius: var(--ui-radius-pill);
+  background: linear-gradient(
+    110deg,
+    var(--ui-accent-fill) 0%,
+    var(--ui-accent-sheen-1) 25%,
+    var(--ui-accent-fill) 50%,
+    var(--ui-accent-sheen-2) 75%,
+    var(--ui-accent-fill) 100%
+  );
+  background-size: 280% 100%;
+  background-position: 11% 0;
+  animation: ui-sheen-idle 7s steps(56) infinite alternate;
+}
+
+.ui-cta > .ui-button {
+  width: 100%;
+}
+
+.ui-cta:has(> .ui-button--large) {
+  display: flex;
+}
+
+@keyframes ui-sheen-idle {
+  from {
+    background-position: 5% 0;
+  }
+  to {
+    background-position: 18% 0;
+  }
+}
+
+.ui-icon-button {
+  display: inline-grid;
+  width: var(--ui-icon-button);
+  height: var(--ui-icon-button);
+  flex: none;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ui-hint);
+  cursor: pointer;
+  font-size: 20px;
+  text-decoration: none;
+  transition:
+    background var(--ui-dur) var(--ui-ease),
+    color var(--ui-dur) var(--ui-ease),
+    transform var(--ui-dur) var(--ui-ease);
+}
+
+@media (hover: hover) {
+  .ui-icon-button:hover {
+    background: var(--ui-hover);
+    color: var(--ui-text);
+  }
+}
+
+.ui-icon-button:active {
+  transform: scale(0.9);
+}
+
+.ui-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+
+.ui-chip {
+  display: inline-flex;
+  max-width: 100%;
+  height: var(--ui-control-h-sm);
+  align-items: center;
+  gap: 6px;
+  padding: 0 15px;
+  border: 0;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-fill);
+  color: var(--ui-text);
+  cursor: pointer;
+  font-family: var(--ui-font);
+  font-size: var(--ui-font-sub);
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background var(--ui-dur) var(--ui-ease),
+    color var(--ui-dur) var(--ui-ease),
+    transform var(--ui-dur) var(--ui-ease);
+}
+
+@media (hover: hover) {
+  .ui-chip:hover {
+    background: var(--ui-fill-2);
+  }
+
+  .ui-chip--active:hover {
+    background: var(--ui-accent-strong);
+  }
+}
+
+.ui-chip:active {
+  transform: scale(0.95);
+}
+
+.ui-chip--active {
+  background: var(--ui-accent-fill);
+  color: var(--ui-accent-text);
+  font-weight: 600;
+}
+
+/* ---------- switches ---------- */
+
+.ui-segmented {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--ui-radius-pill);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ui-text) 9%, transparent);
+}
+
+.ui-segment {
+  position: relative;
+  display: inline-flex;
+  min-height: 32px;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: var(--ui-radius-pill);
+  background: none;
+  color: var(--ui-hint);
+  cursor: pointer;
+  font-family: var(--ui-font);
+  font-size: var(--ui-font-note);
+  font-weight: 600;
+  white-space: nowrap;
+  transition:
+    background var(--ui-dur) var(--ui-ease),
+    color var(--ui-dur) var(--ui-ease),
+    box-shadow var(--ui-dur) var(--ui-ease),
+    transform var(--ui-dur) var(--ui-ease-spring);
+}
+
+.ui-segment:active {
+  transform: scale(0.94);
+}
+
+/* The selected segment is styled in place — the kit's travelling pill needs measurements a
+   static page has no script for; the look is the same neutral raised pill, no accent tint. */
+.ui-segment[aria-selected='true'] {
+  background: var(--ui-card-raised);
+  color: var(--ui-text);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--ui-text) 7%, transparent),
+    0 1px 3px color-mix(in srgb, #000 10%, transparent);
+}
+
+.ui-switch {
+  position: relative;
+  flex: 0 0 auto;
+  width: var(--ui-switch-w);
+  height: var(--ui-switch-h);
+  padding: 0;
+  border: 0;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-fill-3);
+  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, #fff 6%, transparent);
+  cursor: pointer;
+  transition: background var(--ui-dur-toggle) var(--ui-ease-out);
+}
+
+/* The knob is held by both edges rather than moved as a block, so it stretches across the track. */
+.ui-switch::after {
+  --ui-switch-lag: 55ms;
+
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  right: calc(var(--ui-switch-w) - var(--ui-switch-knob) - 2px);
+  height: var(--ui-switch-knob);
+  border-radius: var(--ui-radius-pill);
+  background: linear-gradient(180deg, #fff, color-mix(in srgb, #fff 96%, var(--ui-text)));
+  box-shadow:
+    var(--ui-shadow-1),
+    inset 0 1px 1px color-mix(in srgb, #fff 70%, transparent);
+  transition:
+    left var(--ui-dur-toggle) var(--ui-ease-toggle),
+    right var(--ui-dur-toggle) var(--ui-ease-toggle) var(--ui-switch-lag);
+}
+
+/* On is the platform green in both themes, deliberately outside the accent rebuild: an amber
+   accent would give an amber switch on an amber page, where on and off stop being readable. */
+.ui-switch[aria-checked='true'] {
+  background: var(--ui-confirm);
+}
+
+.ui-switch[aria-checked='true']::after {
+  left: calc(var(--ui-switch-w) - var(--ui-switch-knob) - 2px);
+  right: 2px;
+  transition:
+    left var(--ui-dur-toggle) var(--ui-ease-toggle) var(--ui-switch-lag),
+    right var(--ui-dur-toggle) var(--ui-ease-toggle);
+}
+
+.ui-switch:disabled,
+.ui-switch[aria-disabled='true'] {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.ui-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 14px;
+  cursor: pointer;
+}
+
+.ui-checkbox-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.ui-checkbox-box {
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 7px;
+  background: var(--ui-fill);
+  color: transparent;
+  font-size: 15px;
+  transition:
+    background var(--ui-dur) var(--ui-ease),
+    color var(--ui-dur) var(--ui-ease),
+    transform var(--ui-dur) var(--ui-ease-spring);
+}
+
+.ui-checkbox-box > svg {
+  transform: scale(0.55);
+  transition: transform var(--ui-dur-toggle) var(--ui-ease-toggle);
+}
+
+.ui-checkbox-input:checked + .ui-checkbox-box > svg {
+  transform: scale(1);
+}
+
+.ui-checkbox:active .ui-checkbox-box {
+  transform: scale(0.92);
+}
+
+.ui-checkbox-input:focus-visible + .ui-checkbox-box {
+  outline: 2px solid var(--ui-accent);
+  outline-offset: 2px;
+}
+
+.ui-checkbox-input:checked + .ui-checkbox-box {
+  background: var(--ui-accent-fill);
+  color: var(--ui-accent-text);
+}
+
+.ui-checkbox-input:disabled + .ui-checkbox-box {
+  opacity: 0.5;
+}
+
+.ui-checkbox-label {
+  min-width: 0;
+  color: var(--ui-text);
+  font-size: var(--ui-font-callout);
+  line-height: 1.3;
+}
+
+/* ---------- form ---------- */
+
+/* A form wider than a reading column is a row of fields nobody can scan; it centres itself. */
+.ui-form {
+  display: grid;
+  width: 100%;
+  max-width: 640px;
+  margin-inline: auto;
+  gap: 14px;
+}
+
+.ui-card > .ui-form {
+  padding: 18px 16px;
+}
+
+/* Written content inside a card keeps the card's inset; without it the first letter of every
+   line sits under the rounded corner and is cut by the card's overflow. */
+.ui-card > .ui-prose {
+  padding: 16px 18px;
+}
+
+.ui-card > .ui-segmented {
+  margin: 14px 16px;
+}
+
+.ui-card > .ui-section-footer {
+  margin: 0;
+  padding: 0 16px 14px;
+}
+
+.ui-card > .ui-actions {
+  padding: 12px 16px 16px;
+}
+
+.ui-page > .ui-segmented {
+  margin-bottom: 14px;
+}
+
+.ui-card + .ui-actions {
+  margin-top: 16px;
+}
+
+.ui-label {
+  display: block;
+  margin: 0 0 6px;
+  padding: 0 4px;
+  color: var(--ui-section-header);
+  font-size: var(--ui-font-label);
+  font-weight: 510;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+/* The capsule field: 16px is the floor iOS zooms in under, so a site never sets it lower. */
+.ui-field {
+  display: block;
+  width: 100%;
+  min-height: var(--ui-cta-h);
+  margin: 0;
+  padding: 13px 16px;
+  border: 0;
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-fill);
+  color: var(--ui-text);
+  font: inherit;
+  font-size: max(16px, var(--ui-font-body));
+  line-height: 1.4;
+  box-shadow: inset 0 0 0 1px transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  transition:
+    background var(--ui-dur) var(--ui-ease),
+    box-shadow var(--ui-dur) var(--ui-ease);
+}
+
+.ui-field::placeholder {
+  color: var(--ui-hint);
+  opacity: 1;
+}
+
+.ui-field:focus,
+.ui-field:focus-visible {
+  outline: none;
+  background: var(--ui-fill-2);
+  box-shadow: inset 0 0 0 1px var(--ui-fill-3);
+}
+
+.ui-field[aria-invalid='true'] {
+  box-shadow: inset 0 0 0 1px var(--ui-destructive);
+}
+
+textarea.ui-field {
+  min-height: 110px;
+  resize: vertical;
+}
+
+select.ui-field {
+  padding-right: 40px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--ui-hint) 50%), linear-gradient(135deg, var(--ui-hint) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.ui-error {
+  margin: 6px 4px 0;
+  color: var(--ui-destructive-ink);
+  font-size: var(--ui-font-caption);
+  line-height: 1.35;
+}
+
+.ui-error:empty {
+  display: none;
+}
+
+/* ---------- feedback ---------- */
+
+.ui-badge {
+  display: inline-flex;
+  height: 24px;
+  align-items: center;
+  gap: 5px;
+  padding: 0 10px;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-fill);
+  color: var(--ui-text-2);
+  font-size: var(--ui-font-label);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ui-badge--accent {
+  background: var(--ui-accent-soft);
+  color: var(--ui-accent);
+}
+
+.ui-badge--confirm {
+  background: color-mix(in srgb, var(--ui-confirm) 15%, transparent);
+  color: var(--ui-confirm-ink);
+}
+
+.ui-badge--destructive {
+  background: color-mix(in srgb, var(--ui-destructive) 13%, transparent);
+  color: var(--ui-destructive-ink);
+}
+
+.ui-badge--star {
+  background: color-mix(in srgb, var(--ui-star) 16%, transparent);
+  color: var(--ui-star-ink);
+}
+
+.ui-notice {
+  margin: 12px 10px 24px;
+  color: var(--ui-hint);
+  font-family: var(--ui-font);
+  font-size: var(--ui-font-note);
+  line-height: 1.4;
+  text-align: center;
+}
+
+.ui-notice--error {
+  color: var(--ui-destructive-ink);
+}
+
+.ui-empty {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  padding: 44px 24px;
+  color: var(--ui-hint);
+  font-size: var(--ui-font-sub);
+  line-height: 1.4;
+  text-align: center;
+}
+
+.ui-empty .ui-icon {
+  font-size: 34px;
+  color: var(--ui-fill-3);
+}
+
+.ui-empty-title {
+  margin: 0;
+  color: var(--ui-text);
+  font-size: var(--ui-font-callout);
+  font-weight: 600;
+}
+
+/* Toasts stack centred at the bottom, clear of the hosting badge's corner. */
+.ui-toast-host {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: var(--ui-z-toast);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 0 16px;
+  pointer-events: none;
+}
+
+.ui-toast {
+  max-width: min(100%, 420px);
+  padding: 11px 16px;
+  border-radius: var(--ui-radius-pill);
+  background: var(--ui-material);
+  color: var(--ui-text);
+  box-shadow:
+    var(--ui-pop-edge),
+    var(--ui-shadow-3);
+  font-size: var(--ui-font-sub);
+  line-height: 1.35;
+  pointer-events: auto;
+  animation: ui-toast-in 0.22s var(--ui-ease-out) both;
+}
+
+.ui-toast--out {
+  animation: ui-toast-out 0.2s var(--ui-ease) forwards;
+}
+
+.ui-toast--error {
+  color: var(--ui-destructive-ink);
+}
+
+@keyframes ui-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+}
+
+@keyframes ui-toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+}
+
+/* The native <dialog> on the kit's material: no portal, no overlay layer, no script layer. */
+.ui-dialog {
+  width: min(calc(100% - 32px), 420px);
+  max-height: min(80dvh, calc(100dvh - 32px));
+  margin: auto;
+  padding: 0;
+  border: 0;
+  border-radius: var(--ui-radius-dialog);
+  background: var(--ui-material);
+  color: var(--ui-text);
+  box-shadow: var(--ui-pop-edge), var(--ui-shadow-3);
+  overflow: auto;
+}
+
+.ui-dialog::backdrop {
+  background: color-mix(in srgb, #000 45%, transparent);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+
+.ui-dialog[open] {
+  animation: ui-pop 0.24s var(--ui-ease-out);
+}
+
+.ui-dialog-body {
+  padding: 22px 22px 16px;
+}
+
+.ui-dialog-title {
+  margin: 0;
+  font-size: var(--ui-font-dialog);
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+
+.ui-dialog-text {
+  margin: 8px 0 0;
+  color: var(--ui-text-2);
+  font-size: var(--ui-font-sub);
+  line-height: 1.4;
+}
+
+.ui-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 22px 20px;
+}
+
+@keyframes ui-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+}
+
+/* ---------- data ---------- */
+
+.ui-stats {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+
+.ui-stat {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px 16px;
+  text-align: center;
+}
+
+/* Tabular digits are the point: a countdown whose digits change width jitters every second. */
+.ui-stat-value {
+  color: var(--ui-text);
+  font-size: clamp(40px, 12vw, 64px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.ui-stat-label {
+  color: var(--ui-hint);
+  font-size: var(--ui-font-sub);
+  line-height: 1.3;
+}
+
+.ui-stats .ui-stat-value {
+  font-size: clamp(24px, 6vw, 34px);
+}
+
+/* The compact strip: label right beside its number, so three of them read as one line
+   rather than as numbers on the left and words drifting to the right edge. */
+.ui-stat--row {
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 4px;
+  text-align: left;
+}
+
+.ui-stat--row .ui-stat-value {
+  font-size: var(--ui-font-nav);
+}
+
+.ui-stats:has(.ui-stat--row) {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin-bottom: 14px;
+}
+
+.ui-stat--accent .ui-stat-value {
+  color: var(--ui-accent);
+}
+
+.ui-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--ui-separator);
+  border-radius: var(--ui-radius-field);
+  background: color-mix(in srgb, var(--ui-fill) 35%, transparent);
+  -webkit-overflow-scrolling: touch;
+}
+
+.ui-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  color: var(--ui-text);
+  font-size: 13.5px;
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+}
+
+.ui-table th {
+  position: sticky;
+  top: 0;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--ui-separator);
+  /* The fill is laid over the card, not mixed into it: a translucent fill mixed with the card
+     stays translucent, and the rows scrolled under a sticky cell would show through it. */
+  background: linear-gradient(color-mix(in srgb, var(--ui-fill) 70%, transparent) 0 0) var(--ui-card);
+  color: var(--ui-hint);
+  font-size: 12px;
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.ui-table td {
+  padding: 9px 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--ui-separator) 60%, transparent);
+  vertical-align: top;
+  overflow-wrap: normal;
+  hyphens: auto;
+}
+
+.ui-table tr:last-child > td {
+  border-bottom: 0;
+}
+
+.ui-table td:first-child {
+  font-weight: 560;
+}
+
+.ui-table th[data-align='right'],
+.ui-table td[data-align='right'] {
+  text-align: right;
+}
+
+.ui-table th[data-align='center'],
+.ui-table td[data-align='center'] {
+  text-align: center;
+}
+
+.ui-table-wrap--compact .ui-table {
+  font-size: 13px;
+}
+
+.ui-table-wrap--compact .ui-table th {
+  padding: 7px 12px;
+  font-size: 11.5px;
+}
+
+.ui-table-wrap--compact .ui-table td {
+  padding: 7px 12px;
+}
+
+@media (max-width: 480px) {
+  .ui-table th:first-child,
+  .ui-table td:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    background: linear-gradient(color-mix(in srgb, var(--ui-fill) 35%, transparent) 0 0) var(--ui-card);
+  }
+
+  .ui-table th:first-child {
+    z-index: 2;
+  }
+}
+
+@media (hover: hover) {
+  .ui-table tbody tr:hover > td {
+    background: var(--ui-hover);
+  }
+}
+
+/* ---------- running text ---------- */
+
+.ui-prose {
+  display: grid;
+  min-width: 0;
+  max-width: 68ch;
+  gap: 0.8em;
+  color: var(--ui-text);
+  font-size: var(--ui-font-body);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.ui-prose > * {
+  min-width: 0;
+  margin: 0;
+}
+
+.ui-prose h1,
+.ui-prose h2,
+.ui-prose h3,
+.ui-prose h4 {
+  margin: 0.6em 0 -0.3em;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.ui-prose h1 {
+  font-size: 1.5em;
+}
+
+.ui-prose h2 {
+  font-size: 1.25em;
+}
+
+.ui-prose h3,
+.ui-prose h4 {
+  margin-top: 0.4em;
+  font-size: 1.08em;
+}
+
+.ui-prose > :first-child {
+  margin-top: 0;
+}
+
+.ui-prose strong {
+  font-weight: 650;
+}
+
+.ui-prose ul,
+.ui-prose ol {
+  padding-inline-start: 1.35em;
+}
+
+.ui-prose ol {
+  padding-inline-start: 1.7em;
+}
+
+.ui-prose li {
+  padding-inline-start: 0.35em;
+}
+
+.ui-prose li + li,
+.ui-prose li > ul,
+.ui-prose li > ol {
+  margin-top: 0.25em;
+}
+
+.ui-prose a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 40%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: text-decoration-color var(--ui-dur) var(--ui-ease);
+}
+
+@media (hover: hover) {
+  .ui-prose a:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+.ui-prose blockquote {
+  padding-left: 14px;
+  border-left: 2px solid var(--ui-separator);
+  color: var(--ui-text-2);
+}
+
+.ui-prose code {
+  padding: 0.12em 0.35em;
+  border-radius: 6px;
+  background: var(--ui-fill);
+  font-family: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.92em;
+}
+
+.ui-prose pre {
+  overflow-x: auto;
+  padding: 14px;
+  border-radius: var(--ui-radius-field);
+  background: var(--ui-fill);
+  font-family: 'SF Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.88em;
+  line-height: 1.5;
+}
+
+.ui-prose pre code {
+  padding: 0;
+  border-radius: 0;
+  background: none;
+  font-size: inherit;
+}
+
+.ui-prose img {
+  border-radius: var(--ui-radius-field);
+}
+
+.ui-prose hr {
+  margin: 0.4em 0;
+}
+
+.ui-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------- icons, emoji, spinner ---------- */
+
+/* Phosphor bold paths are filled and sized by the host's font-size; the sprite carries no fill. */
+.ui-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex: none;
+  fill: currentColor;
+  vertical-align: -0.14em;
+}
+
+.ui-icon--lg {
+  width: 1.4em;
+  height: 1.4em;
+}
+
+/* The <img> ui.js puts in place of a text emoji: Apple's raster at line height. */
+.ui-emoji {
+  display: inline-block;
+  width: 1.2em;
+  height: 1.2em;
+  object-fit: contain;
+  vertical-align: -0.24em;
+  -webkit-user-drag: none;
+  user-select: none;
+  pointer-events: none;
+}
+
+.ui-hero-emoji .ui-emoji {
+  width: 100%;
+  height: 100%;
+  vertical-align: 0;
+}
+
+.ui-stat-value .ui-emoji,
+.ui-hero-title .ui-emoji,
+.ui-page-title .ui-emoji {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.12em;
+}
+
+.ui-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  color: var(--ui-hint);
+  animation: ui-spin 0.85s linear infinite;
+}
+
+.ui-spinner-track {
+  opacity: 0.22;
+}
+
+.ui-button .ui-spinner {
+  width: 18px;
+  height: 18px;
+  color: inherit;
+}
+
+@keyframes ui-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-cta,
+  .ui-hero-emoji,
+  .ui-hero-emoji > *,
+  .ui-hero-title,
+  .ui-hero-sub,
+  .ui-hero-actions,
+  .ui-toast,
+  .ui-dialog[open] {
+    animation: none;
+  }
+
+  .ui-switch::after,
+  .ui-segment,
+  .ui-tile,
+  .ui-field,
+  .ui-checkbox-box,
+  .ui-checkbox-box > svg,
+  .ui-row--interactive::after {
+    transition: none;
+  }
+}
+
+/* ---------- layout: a page is a website ---------- */
+
+/* The kit above is an app screen's vocabulary; a site needs a document's. Everything below is
+   additive: `.ui-page` keeps its 560px for the pages already published, and a new page is built
+   from bands and a container. Desktop starts at 720px because the browser chat previews an
+   artifact in a 600–960px lane and should already show the desktop layout there. */
+:root {
+  --ui-space-2: 8px;
+  --ui-space-3: 12px;
+  --ui-space-4: 16px;
+  --ui-space-5: 24px;
+  --ui-space-6: 32px;
+  --ui-space-7: 48px;
+  --ui-space-8: 64px;
+  --ui-gutter: clamp(16px, 4vw, 40px);
+  --ui-container: 1120px;
+  --ui-container-narrow: 720px;
+  --ui-container-wide: 1400px;
+  --ui-band: clamp(48px, 7vw, 96px);
+  --ui-display-1: clamp(36px, 2.6vw + 22px, 64px);
+  --ui-display-2: clamp(28px, 1.4vw + 18px, 40px);
+  --ui-display-3: clamp(20px, 0.6vw + 16px, 24px);
+  --ui-lead: clamp(17px, 0.3vw + 15px, 20px);
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.ui-container {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--ui-container);
+  margin-inline: auto;
+  padding-inline: max(var(--ui-gutter), env(safe-area-inset-right)) max(var(--ui-gutter), env(safe-area-inset-left));
+}
+
+.ui-container--narrow {
+  max-width: var(--ui-container-narrow);
+}
+
+.ui-container--wide {
+  max-width: var(--ui-container-wide);
+}
+
+/* A band is a full-width section that owns its ground; consecutive plain bands share one gap. */
+.ui-band {
+  padding-block: var(--ui-band);
+}
+
+.ui-band--tight {
+  padding-block: calc(var(--ui-band) * 0.5);
+}
+
+.ui-band--card {
+  background: var(--ui-card);
+}
+
+/* ---------- ink: the opposite theme, locally ----------
+   An inverted surface used to paint only itself (text as ground, page colour as text) and
+   left every token inside it alone, so a badge, an eyebrow, a field, a nested panel or a
+   model's own component on var(--ui-fill) came out invisible in one theme or the other.
+   Now the scope re-declares the tokens as their opposite-theme cut derived from the pair
+   --ui-ink-bg / --ui-ink-text, and everything inside paints as it always does. Children
+   get the pair flipped back, so an ink panel inside an ink band is a paper card again —
+   the one that should stand out. */
+:root {
+  --ui-paper-bg: var(--ui-bg);
+  --ui-paper-text: var(--ui-text);
+  --ui-ink-bg: var(--ui-text);
+  --ui-ink-text: var(--ui-bg);
+}
+
+.ui-band--ink,
+.ui-panel--ink {
+  --ui-bg: var(--ui-ink-bg);
+  --ui-text: var(--ui-ink-text);
+  --ui-card: color-mix(in srgb, var(--ui-ink-text) 9%, var(--ui-ink-bg));
+  --ui-card-raised: color-mix(in srgb, var(--ui-ink-text) 13%, var(--ui-ink-bg));
+  --ui-material: color-mix(in srgb, var(--ui-ink-text) 9%, var(--ui-ink-bg));
+  --ui-text-2: color-mix(in srgb, var(--ui-ink-text) 84%, var(--ui-ink-bg));
+  --ui-hint: color-mix(in srgb, var(--ui-ink-text) 62%, var(--ui-ink-bg));
+  --ui-section-header: color-mix(in srgb, var(--ui-ink-text) 62%, var(--ui-ink-bg));
+  --ui-separator: color-mix(in srgb, var(--ui-ink-text) 16%, transparent);
+  --ui-fill: color-mix(in srgb, var(--ui-ink-text) 10%, transparent);
+  --ui-fill-2: color-mix(in srgb, var(--ui-ink-text) 16%, transparent);
+  --ui-fill-3: color-mix(in srgb, var(--ui-ink-text) 24%, transparent);
+  --ui-hover: color-mix(in srgb, var(--ui-ink-text) 6%, transparent);
+  --ui-press: color-mix(in srgb, var(--ui-ink-text) 11%, transparent);
+  --ui-material-btn: color-mix(in srgb, var(--ui-ink-text) 16%, transparent);
+  --ui-material-btn-edge: color-mix(in srgb, var(--ui-ink-text) 14%, transparent);
+  --ui-glass-edge: color-mix(in srgb, var(--ui-ink-text) 30%, transparent);
+  --ui-glass-edge-2: color-mix(in srgb, var(--ui-ink-text) 12%, transparent);
+  /* The semantic inks are cut for the paper ground; pulled toward the ink text they read
+     on the opposite one — lighter on a dark band, darker on a light one. */
+  --ui-confirm-ink: color-mix(in srgb, var(--ui-confirm) 72%, var(--ui-ink-text));
+  --ui-destructive-ink: color-mix(in srgb, var(--ui-destructive) 72%, var(--ui-ink-text));
+  --ui-star-ink: color-mix(in srgb, var(--ui-star) 72%, var(--ui-ink-text));
+  background: var(--ui-bg);
+  color: var(--ui-text);
+}
+
+.ui-band--ink > *,
+.ui-panel--ink > * {
+  --ui-ink-bg: var(--ui-paper-bg);
+  --ui-ink-text: var(--ui-paper-text);
+}
+
+/* Native controls inside an ink surface follow the surface, not the page. */
+:root:not([data-theme='dark']) .ui-band--ink,
+:root:not([data-theme='dark']) .ui-panel--ink {
+  color-scheme: dark;
+}
+
+[data-theme='dark'] .ui-band--ink,
+[data-theme='dark'] .ui-panel--ink {
+  color-scheme: light;
+}
+
+/* Monochrome accent is the text colour, so it flips with the text. */
+:root:not([data-accent]) .ui-band--ink,
+:root:not([data-accent]) .ui-panel--ink,
+[data-accent='mono'] .ui-band--ink,
+[data-accent='mono'] .ui-panel--ink {
+  --ui-accent: var(--ui-ink-text);
+  --ui-accent-fill: var(--ui-ink-text);
+  --ui-accent-text: var(--ui-ink-bg);
+  --ui-accent-soft: color-mix(in srgb, var(--ui-ink-text) 12%, transparent);
+  --ui-accent-strong: color-mix(in srgb, var(--ui-ink-text) 84%, var(--ui-ink-bg));
+  --ui-accent-fill-strong: var(--ui-accent-strong);
+}
+
+/* A colour accent keeps its fill; its text cut swaps to the one made for the other ground. */
+[data-accent]:not([data-accent='mono']) .ui-band--ink,
+[data-accent]:not([data-accent='mono']) .ui-panel--ink {
+  --ui-accent: var(--sa);
+  --ui-accent-soft: color-mix(in srgb, var(--sa) 18%, transparent);
+}
+
+[data-theme='dark'][data-accent]:not([data-accent='mono']) .ui-band--ink,
+[data-theme='dark'][data-accent]:not([data-accent='mono']) .ui-panel--ink {
+  --ui-accent: var(--sa-ink);
+  --ui-accent-soft: color-mix(in srgb, var(--sa) 10%, transparent);
+}
+
+.ui-band--ink .ui-button--ghost {
+  background: transparent;
+  color: var(--ui-text);
+}
+
+.ui-band:not(.ui-band--card):not(.ui-band--ink) + .ui-band:not(.ui-band--card):not(.ui-band--ink) {
+  padding-top: 0;
+}
+
+/* Two columns on desktop, one on a phone; `--split` sets the ratio. */
+.ui-split {
+  display: grid;
+  gap: var(--ui-space-6);
+  align-items: center;
+}
+
+.ui-stack {
+  display: grid;
+  gap: var(--gap, var(--ui-space-4));
+  align-content: start;
+}
+
+.ui-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--gap, var(--ui-space-3));
+}
+
+@media (min-width: 720px) {
+  .ui-split {
+    grid-template-columns: var(--split, 1fr 1fr);
+    gap: var(--ui-space-8);
+  }
+
+  .ui-grid[style*='--cols'] {
+    grid-template-columns: repeat(var(--cols), 1fr);
+  }
+
+  .ui-sticky {
+    position: sticky;
+    top: calc(56px + var(--ui-space-5));
+  }
+}
+
+/* The site's type scale sits above the app's: a first screen, a section, a card. */
+.ui-display {
+  font-size: var(--ui-display-1);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.ui-display-2 {
+  font-size: var(--ui-display-2);
+  font-weight: 700;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.ui-display-3 {
+  font-size: var(--ui-display-3);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.ui-lead {
+  max-width: 58ch;
+  color: var(--ui-text-2);
+  font-size: var(--ui-lead);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.ui-eyebrow {
+  color: var(--ui-hint);
+  font-size: var(--ui-font-label);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ui-hint {
+  color: var(--ui-hint);
+  font-size: var(--ui-font-sub);
+  line-height: 1.45;
+}
+
+.ui-band-head {
+  display: grid;
+  max-width: 62ch;
+  gap: var(--ui-space-3);
+  margin-bottom: var(--ui-space-6);
+}
+
+.ui-band-head--center {
+  margin-inline: auto;
+  justify-items: center;
+  text-align: center;
+}
+
+/* A panel is a padded card with its own rhythm — for content, where a card is for rows. */
+.ui-panel {
+  display: grid;
+  align-content: start;
+  gap: var(--ui-space-4);
+  padding: clamp(20px, 2.4vw, 32px);
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-card);
+  box-shadow: var(--ui-shadow-1);
+}
+
+/* A pill or a small caption dropped straight into the panel's grid stretched to a full-width
+   bar; they keep their own width. */
+.ui-panel > .ui-badge,
+.ui-panel > .ui-eyebrow,
+.ui-panel > .ui-chip,
+.ui-panel > .ui-button:not(.ui-button--large) {
+  justify-self: start;
+}
+
+.ui-panel--fill {
+  background: var(--ui-fill);
+  box-shadow: none;
+}
+
+/* The inverted panel: its tokens come from the ink block above; here only the flat look. */
+.ui-panel--ink {
+  background: var(--ui-bg);
+  box-shadow: var(--ui-shadow-2);
+}
+
+.ui-feature {
+  display: grid;
+  align-content: start;
+  gap: var(--ui-space-3);
+}
+
+.ui-feature-icon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--ui-fill);
+  color: var(--ui-text);
+}
+
+.ui-feature-icon .ui-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.ui-feature-title {
+  font-size: var(--ui-display-3);
+  font-weight: 600;
+}
+
+.ui-feature-text {
+  color: var(--ui-text-2);
+  line-height: 1.5;
+}
+
+.ui-step {
+  display: grid;
+  gap: var(--ui-space-2);
+  padding-top: var(--ui-space-4);
+  border-top: 1px solid var(--ui-separator);
+}
+
+.ui-step-num {
+  color: var(--ui-hint);
+  font-size: var(--ui-display-2);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.ui-price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-variant-numeric: tabular-nums;
+}
+
+.ui-price-value {
+  font-size: var(--ui-display-2);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.ui-price-unit {
+  color: var(--ui-hint);
+}
+
+.ui-quote {
+  display: grid;
+  gap: var(--ui-space-4);
+}
+
+.ui-quote-text {
+  font-size: var(--ui-display-3);
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.ui-quote-by {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ui-hint);
+  font-size: var(--ui-font-sub);
+}
+
+.ui-avatar {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--ui-fill-2);
+  color: var(--ui-text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* The picture of a first screen when there is no photo: a tinted scene with a floating note. */
+.ui-visual {
+  position: relative;
+  display: grid;
+  min-height: 240px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: var(--ui-radius-card);
+  background: var(--ui-fill);
+}
+
+.ui-visual--accent {
+  background: color-mix(in srgb, var(--ui-accent) 12%, var(--ui-fill));
+}
+
+.ui-visual-emoji {
+  font-size: clamp(96px, 12vw, 160px);
+  line-height: 1;
+}
+
+.ui-visual-emoji .ui-emoji {
+  width: 1em;
+  height: 1em;
+}
+
+.ui-visual-note {
+  position: absolute;
+  z-index: var(--ui-z-raised);
+  bottom: 16px;
+  left: 16px;
+  max-width: calc(100% - 32px);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: var(--ui-card);
+  box-shadow: var(--ui-shadow-2);
+  font-size: var(--ui-font-sub);
+}
+
+.ui-visual-note--tr {
+  top: 16px;
+  right: 16px;
+  bottom: auto;
+  left: auto;
+}
+
+/* A first-screen button: CTA height, content width. The header's call hides on a phone. */
+.ui-button--xl {
+  height: var(--ui-cta-h);
+  padding: 0 28px;
+  font-size: var(--ui-font-body);
+}
+
+.ui-cta:has(> .ui-button--xl) {
+  display: inline-flex;
+}
+
+@media (max-width: 599px) {
+  .ui-nav-cta {
+    display: none;
+  }
+}
+
+.ui-footer--cols {
+  text-align: left;
+}
+
+.ui-footer-grid {
+  display: grid;
+  gap: var(--ui-space-6);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+}
+
+.ui-footer-grid > :first-child {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 720px) {
+  .ui-footer-grid {
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+  }
+
+  .ui-footer-grid > :first-child {
+    grid-column: auto;
+  }
+}
+
+.ui-footer-title {
+  margin-bottom: 10px;
+  color: var(--ui-text);
+  font-size: var(--ui-font-sub);
+  font-weight: 600;
+}
+
+.ui-footer-links {
+  display: grid;
+  gap: 8px;
+  font-size: var(--ui-font-sub);
+}
+
+.ui-footer-links a {
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .ui-footer-links a:hover {
+    color: var(--ui-text);
+  }
+}
+
+.ui-footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px 24px;
+  margin-top: var(--ui-space-6);
+  padding-top: var(--ui-space-4);
+  border-top: 1px solid var(--ui-separator);
+}
+
+
+/* мобильная надёжность окон */
+.btn,.modal-close,.card-pad button,.arrow,.dot{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.modal{-webkit-overflow-scrolling:touch}
+.modal.on{display:flex !important}
+
+
+
+:root{
+--paper:#FBF4E8; --paper2:#EFEAE2; --card:#FFFDF6;
+--ink:#5C2A1E; --ink2:#7A3A28;
+--gold:#D4A843; --blue:#2E5A88; --red:#B33A2B;
+--txt:#2C2C2C; --mut:#8A7A6B;
+--r:14px;
+--serif:"Playfair Display",Georgia,serif;
+--sans:"Raleway",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+[data-theme='dark']{
+--paper:#211410; --paper2:#2C1C16; --card:#32211A;
+--ink:#F3D9A6; --ink2:#E9C489;
+--txt:#F1E6D6; --mut:#B9A48F;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+img,svg{max-width:100%}
+body{font-family:var(--sans);background:var(--paper);color:var(--txt);margin:0;line-height:1.6;overflow-x:hidden;-webkit-text-size-adjust:100%}
+h1,h2,h3,.serif{font-family:var(--serif);color:var(--ink);line-height:1.15;margin:0 0 8px;text-wrap:balance}
+p{margin:0 0 10px}
+a{word-break:break-word}
+/* NAV */
+.ui-nav{background:#5C2A1E!important;border-bottom:2px solid #D4A843;position:sticky;top:0;z-index:50}
+.ui-nav-inner{max-width:1160px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px}
+.ui-nav-brand{color:#FBF4E8!important;font-family:var(--serif);font-weight:800;font-size:16px;line-height:1.15;display:flex;gap:10px;align-items:center;text-decoration:none;margin-right:auto}
+.ui-nav-links{display:flex;align-items:center;gap:2px}
+.ui-nav-links a{color:#F3DCC2!important;opacity:.88;font-size:13.5px;font-weight:600;text-decoration:none;padding:12px 10px;min-height:44px;display:inline-flex;align-items:center;border-radius:8px;white-space:nowrap}
+.ui-nav-links a.on,.ui-nav-links a:hover{opacity:1;color:#fff!important;box-shadow:inset 0 -2px 0 var(--gold)}
+.brand-mark{width:36px;height:36px;flex:0 0 36px;display:grid;place-items:center;background:rgba(212,168,67,.18);border:1px solid rgba(212,168,67,.6);border-radius:9px;font-size:18px}
+.burger{display:none;width:44px;height:44px;border:1px solid rgba(243,220,194,.4);background:transparent;border-radius:10px;cursor:pointer;flex-direction:column;gap:5px;align-items:center;justify-content:center}
+.burger span{display:block;width:20px;height:2px;background:#FBF4E8;border-radius:2px;transition:.2s}
+.burger[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger[aria-expanded="true"] span:nth-child(2){opacity:0}
+.burger[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+/* BANDS */
+.ui-band{padding:56px 0}
+.ui-band--card{background:var(--paper2)}
+.ui-container{max-width:1160px}
+.eyebrow{font-size:11px;letter-spacing:2px;text-transform:uppercase;color:#A67C1A;font-weight:800;display:block;margin-bottom:8px}
+[data-theme='dark'] .eyebrow{color:#E9C489}
+.lead,.small{color:var(--mut)}
+.small{font-size:13.5px;line-height:1.6}
+h2{font-size:clamp(26px,4vw,40px)!important;letter-spacing:-.01em}
+/* HERO */
+.hero{position:relative;overflow:hidden;background:radial-gradient(900px 300px at 20% 0%,rgba(212,168,67,.20),transparent),radial-gradient(700px 320px at 90% 20%,rgba(46,90,136,.13),transparent),linear-gradient(180deg,#FBF4E8,#F5EAD3);border-bottom:1px solid #E8DCC3}
+[data-theme='dark'] .hero{background:linear-gradient(180deg,#241511,#2C1C16)}
+.hero-orn{position:absolute;top:0;right:0;bottom:0;left:0;pointer-events:none;opacity:.15;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160' viewBox='0 0 160 160'%3E%3Cg fill='none' stroke='%235C2A1E' stroke-width='1.2'%3E%3Cpath d='M80 10 L90 70 L150 80 L90 90 L80 150 L70 90 L10 80 L70 70 Z'/%3E%3Ccircle cx='80' cy='80' r='10'/%3E%3C/g%3E%3C/svg%3E");background-size:160px}
+.hero-mount{position:absolute;left:0;right:0;bottom:-10px;height:170px;opacity:.22;pointer-events:none;width:100%}
+.hero-inner{position:relative;text-align:center;max-width:860px;margin:0 auto;padding:22px 16px 10px}
+.hero-title{font-size:clamp(30px,6.4vw,58px)!important;font-weight:800;line-height:1.05}
+.hero-sub{margin:10px auto 0;color:#6B5A4A;font-size:clamp(14px,2.4vw,17px);max-width:620px}
+.hero-quote{min-height:62px;margin:16px auto 6px;max-width:660px;font-family:var(--serif);font-style:italic;font-size:clamp(16px,2.8vw,20px);color:#5C2A1E;transition:opacity .18s}
+[data-theme='dark'] .hero-quote,[data-theme='dark'] .hero-sub{color:var(--txt)}
+.dots{display:flex;gap:10px;justify-content:center;margin:12px 0;align-items:center}
+.dot{width:12px;height:12px;border-radius:50%;background:#D9CBB2;border:0;cursor:pointer;padding:0;min-width:12px;min-height:12px}
+.dot.on{background:var(--red);transform:scale(1.25)}
+.hero-side{position:absolute;top:50%;font-size:11px;letter-spacing:2px;color:#A68D6E;writing-mode:vertical-rl;text-orientation:mixed;white-space:nowrap}
+.hero-side.l{left:14px;transform:rotate(180deg) translateY(50%)}
+.hero-side.r{right:14px;transform:translateY(-50%)}
+.arrow{position:absolute;top:44%;width:44px;height:44px;border-radius:50%;border:1px solid #D9CBB2;background:#FFFDF6;color:#5C2A1E;font-size:22px;cursor:pointer;display:grid;place-items:center;z-index:2}
+.arrow.l{left:12px}.arrow.r{right:12px}
+.hero-cta{justify-content:center;display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+/* ORNAMENT */
+.orn-div{display:flex;align-items:center;gap:12px;margin:8px auto;max-width:1160px;padding:0 20px}
+.orn-div:before,.orn-div:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,transparent,#C7A55A,transparent)}
+.orn-d{color:#8A5A2E;font-size:18px;white-space:nowrap}
+/* GRIDS + CARDS — PC красиво, мобайл в 1 колонку */
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr));gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.card{background:var(--card);border:1px solid #E8DCC3;border-radius:var(--r);box-shadow:0 6px 18px rgba(92,42,30,.08);overflow:hidden;display:flex;flex-direction:column;min-width:0}
+[data-theme='dark'] .card{border-color:#4A3228;box-shadow:none}
+.card-pad{padding:18px;flex:1;min-width:0}
+.card-img{min-height:132px;padding:18px 12px;display:grid;place-items:center;gap:4px;text-align:center;background:linear-gradient(135deg,#EFE2C6,#E6D2AC);color:#6B4E2E;font-size:12.5px;font-weight:600;border-bottom:1px solid #E8DCC3;position:relative;overflow:hidden;line-height:1.4}
+.card-img.kuhnya{background:linear-gradient(135deg,#F3D9A6,#E9B96A);font-size:34px}
+.card-img i{font-style:normal;font-size:36px;line-height:1}
+.card h3{font-size:19px;margin:8px 0 6px}
+@media(hover:hover){
+.card{transition:transform .18s,box-shadow .18s}
+.card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(92,42,30,.14)}
+.btn{transition:transform .15s,filter .15s}
+}
+.tag{display:inline-block;font-size:11px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;background:rgba(46,90,136,.12);color:var(--blue);border-radius:20px;padding:5px 11px;margin-bottom:8px}
+.tag.gold{background:rgba(212,168,67,.22);color:#7A5A15}
+[data-theme='dark'] .tag.gold{color:#F3D9A6}
+.btn{display:inline-flex;align-items:center;justify-content:center;border:0;cursor:pointer;border-radius:22px;padding:12px 20px;min-height:44px;font-weight:800;font-size:13.5px;text-decoration:none;line-height:1.2;text-align:center;white-space:nowrap;word-break:normal}
+.btn-gold{background:var(--gold);color:#3A2300}
+.btn-red{background:var(--red);color:#fff}
+.btn-blue{background:var(--blue);color:#fff}
+.btn:hover{filter:brightness(1.06)}
+/* FEATURES */
+.ui-split{ gap:28px }
+.feat{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid #EDE0C6;border-radius:12px;padding:14px}
+[data-theme='dark'] .feat{border-color:#4A3228}
+.feat-ic{width:48px;height:48px;flex:0 0 48px;border-radius:50%;display:grid;place-items:center;background:#FFF7E3;border:1px solid #E8D1A0;color:#8A5A15;font-size:22px}
+[data-theme='dark'] .feat-ic{background:#3A281E;color:#F3D9A6;border-color:#5A4030}
+/* TIMELINE */
+.timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0;position:relative}
+.timeline:before{content:"";position:absolute;left:12px;right:12px;top:11px;height:2px;background:#C9A86A}
+.tstep{text-align:center;position:relative;padding-top:30px;min-width:0}
+.tdot{position:absolute;top:4px;left:50%;transform:translateX(-50%);width:16px;height:16px;border-radius:50%;background:#FFFDF6;border:2px solid #C9A86A}
+.tstep.last .tdot{background:var(--red);border-color:var(--red)}
+.tbox{background:var(--card);border:1px solid #E8DCC3;border-radius:10px;padding:10px;font-size:13px;margin:0 2px;line-height:1.45}
+.steps4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:start}
+.steps4>div{background:var(--card);border:1px solid #EDE0C6;border-radius:12px;padding:14px}
+.step-n{width:38px;height:38px;border-radius:50%;display:inline-grid;place-items:center;color:#fff;font-weight:800;margin-right:8px;font-size:16px}
+/* MAP */
+.mapwrap{display:grid;grid-template-columns:340px 1fr;gap:18px;margin-top:16px;align-items:start}
+.ufomap{position:relative;background:#FFF9EC;border:1px solid #E8DCC3;border-radius:12px;min-height:320px;padding:14px;overflow:hidden}
+[data-theme='dark'] .ufomap{background:#31211A;border-color:#4A3228}
+.pin{position:absolute;transform:translate(-50%,-100%);cursor:pointer;background:none;border:0;font-size:26px;line-height:1;min-width:44px;min-height:44px;display:grid;place-items:center;justify-items:center}
+.pin span{display:block;font-size:10.5px;font-weight:700;background:#5C2A1E;color:#fff;border-radius:8px;padding:3px 7px;margin-top:2px;white-space:nowrap}
+.pin.active{filter:drop-shadow(0 3px 6px rgba(179,58,43,.55))}
+.pin:focus-visible{outline:2px solid var(--gold);border-radius:8px}
+/* MEDIA */
+.video{min-height:132px;display:grid;place-items:center;background:linear-gradient(135deg,#D9CFC0,#C4B49C);color:#5C2A1E;position:relative}
+.play{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.94);display:grid;place-items:center;font-size:19px;border:1px solid #fff;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.audio{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid #E8DCC3;border-radius:12px;padding:14px}
+.audio button{width:44px;height:44px;flex:0 0 44px;border-radius:50%;border:0;background:#8A8A8A;color:#fff;cursor:pointer;font-size:15px;display:grid;place-items:center}
+.bar{flex:1;height:6px;background:#E5DCC8;border-radius:6px;position:relative;overflow:hidden;margin-top:8px}
+.bar i{position:absolute;left:0;top:0;bottom:0;width:0;background:var(--gold);display:block}
+/* CTA */
+.cta{background:linear-gradient(100deg,#C46A2B,#8A2E1F 60%,#5C2A1E);color:#FFF3D9;position:relative;overflow:hidden}
+.cta:before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;opacity:.16;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cpath d='M20 20 Q40 5 60 20 T100 20 M20 60 Q40 45 60 60 T100 60 M20 100 Q40 85 60 100 T100 100' fill='none' stroke='%23FFD98A' stroke-width='1.4'/%3E%3C/svg%3E")}
+.cta-inner{position:relative;display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:20px;align-items:center}
+.cta h2{color:#FFF3D9!important}
+/* FORMS */
+.field{width:100%;border:1px solid #E0D2B4;border-radius:10px;padding:12px 14px;min-height:44px;font:inherit;font-size:15px;background:#FFFDF6;color:#2C2C2C}
+[data-theme='dark'] .field{background:#241511;color:#F1E6D6;border-color:#4A3228}
+.field:focus{outline:2px solid var(--gold);outline-offset:1px;border-color:var(--gold)}
+label.lbl{font-size:12px;font-weight:700;color:var(--mut);display:block;margin:10px 0 6px}
+form#evform,form#cbform{display:grid!important;grid-template-columns:1fr 1fr;gap:12px}
+.faq details{background:var(--card);border:1px solid #E8DCC3;border-radius:10px;padding:13px 15px;margin-bottom:10px}
+.faq summary{cursor:pointer;font-weight:800;color:var(--ink);min-height:44px;display:flex;align-items:center;list-style:none}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary:before{content:"+";flex:0 0 28px;width:28px;height:28px;border-radius:50%;background:rgba(212,168,67,.2);display:inline-grid;place-items:center;margin-right:10px;color:#7A5A15}
+.faq details[open] summary:before{content:"–"}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.slogan{text-align:center;font-family:var(--serif);color:var(--ink);font-size:clamp(19px,3.4vw,24px);padding:22px 10px 6px;line-height:1.4}
+.ui-footer{background:#5C2A1E!important;color:#F3DCC2!important}
+.ui-footer a{color:#F3DCC2!important}
+.ui-footer-grid{gap:22px}
+.soc{display:flex;gap:10px;flex-wrap:wrap}
+.soc a{width:44px;height:44px;border-radius:50%;border:1px solid rgba(243,220,194,.5);display:grid;place-items:center;text-decoration:none;font-size:13px;font-weight:700}
+.topnav{display:flex;gap:6px 14px;flex-wrap:wrap;justify-content:center;margin:10px 0 0}
+.topnav a{color:#F3DCC2;text-decoration:none;font-size:13px;font-weight:600;padding:8px 4px;min-height:44px;display:inline-flex;align-items:center}
+section{scroll-margin-top:76px}
+.badge-type{background:var(--blue);color:#fff;font-size:11px;font-weight:800;border-radius:12px;padding:4px 10px;white-space:nowrap}
+.date{font-size:12.5px;color:#8A6E44;font-weight:800;white-space:nowrap}
+/* ===== TABLET ===== */
+@media(max-width:1020px){
+.grid5{grid-template-columns:repeat(3,1fr)}
+.cta-inner{grid-template-columns:1fr 1fr}
+.ui-nav-links a{font-size:12.5px;padding:12px 7px}
+}
+/* ===== MOBILE NAV + STACK ===== */
+@media(max-width:920px){
+.burger{display:flex}
+.ui-nav-inner{flex-wrap:wrap}
+.ui-nav-links{display:none;width:100%;flex-direction:column;align-items:stretch;background:#4A2115;border:1px solid rgba(212,168,67,.35);border-radius:12px;padding:8px;margin-top:4px}
+.ui-nav-links.open{display:flex}
+.ui-nav-links a{font-size:15px;padding:13px 14px;min-height:48px;border-radius:9px}
+.ui-nav-links a:hover{box-shadow:none;background:rgba(212,168,67,.16)}
+}
+/* ===== PHONE ===== */
+@media(max-width:760px){
+.ui-band{padding:34px 0}
+.grid4,.grid3{grid-template-columns:1fr;gap:14px}
+.grid5{grid-template-columns:1fr;gap:12px}
+.kv{grid-template-columns:1fr}
+.mapwrap{grid-template-columns:1fr}
+.cta-inner{grid-template-columns:1fr;text-align:left}
+.hero-side,.arrow{display:none}
+.hero-quote{min-height:72px}
+.timeline{grid-template-columns:1fr;gap:10px;padding-left:6px}
+.timeline:before{left:13px;right:auto;top:10px;bottom:10px;width:2px;height:auto}
+.tstep{text-align:left;padding:0 0 0 34px}
+.tdot{left:0;top:2px;transform:none}
+.tbox{margin:0}
+.steps4{grid-template-columns:1fr}
+form#evform,form#cbform{grid-template-columns:1fr}
+form#evform .field[style],form#cbform [style]{grid-column:auto!important}
+.card-pad{padding:16px}
+.audio{flex-direction:row}
+.ufomap{min-height:300px}
+.ui-footer-grid{grid-template-columns:1fr!important;text-align:left}
+.slogan{font-size:20px}
+}
+@media(max-width:380px){
+.ui-nav-brand{font-size:14px}
+.hero-title{font-size:29px!important}
+.btn{width:100%}
+.hero-cta a{width:100%}
+.soc a{width:48px;height:48px}
+}
+/* reduce motion */
+@media(prefers-reduced-motion:reduce){
+html{scroll-behavior:auto}
+*{transition:none!important;animation:none!important}
+}
+
+
+
+/* --- народы: фото и окно-пояснение --- */
+.card-photo{position:relative;aspect-ratio:4/3;overflow:hidden;background:#E6D2AC;border-bottom:1px solid #E8DCC3}
+[data-theme='dark'] .card-photo{border-color:#4A3228}
+.card-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.card-photo .cap{position:absolute;left:0;right:0;bottom:0;padding:8px 12px;font-size:12px;line-height:1.35;color:#FFF7E8;background:linear-gradient(rgba(60,25,15,0),rgba(60,25,15,.8))}
+.card-more{margin-top:12px;align-self:flex-start;display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 18px;white-space:nowrap}
+.modal{display:none;position:fixed;top:0;right:0;bottom:0;left:0;z-index:120;padding:18px;background:rgba(38,16,10,.66);overflow-y:auto}
+.modal.on{display:flex;align-items:center;justify-content:center}
+.modal-box{position:relative;width:100%;max-width:740px;max-height:92vh;overflow-y:auto;background:var(--card);border:1px solid #E8DCC3;border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,.35)}
+[data-theme='dark'] .modal-box{border-color:#4A3228}
+.modal-photo{aspect-ratio:16/9;overflow:hidden;background:#E6D2AC}
+.modal-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.modal-body{padding:20px 24px 26px}
+.modal-body h3{margin:8px 0 4px}
+.modal-body p{font-size:15px;line-height:1.6}
+.modal-close{position:absolute;top:10px;right:10px;width:44px;height:44px;border-radius:50%;border:0;background:rgba(30,14,8,.6);color:#FFF7E8;font-size:20px;line-height:1;cursor:pointer}
+.nlist{margin:6px 0 14px;padding-left:18px;font-size:15px;line-height:1.6;color:inherit}
+.credits{font-size:12px;color:var(--mut)}
+.credits a{color:inherit}
+.yfo{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(158px,100%),1fr));gap:10px}.yfo-item{display:block;padding:0;margin:0;border:1px solid #E8DCC3;border-radius:12px;background:transparent;cursor:pointer;overflow:hidden;text-align:left;touch-action:manipulation;-webkit-tap-highlight-color:transparent}.yfo-item img{width:100%;aspect-ratio:4/3;height:auto;object-fit:cover;display:block}.yfo-item span{display:block;padding:7px 9px 8px;font-size:12.5px;line-height:1.35;color:inherit}.yfo-item.on{border-color:#D4A843;box-shadow:0 0 0 2px rgba(212,168,67,.45)}[data-theme='dark'] .yfo-item{border-color:#553B2C} @media (max-width:719px){
+ .modal{padding:0}
+ .modal.on{align-items:flex-start}
+ .modal-box{max-width:none;max-height:100vh;border-radius:0;min-height:100%}
+ .modal-body{padding:18px 16px 28px}
+}
+
+
+
+html.cap-lock,html.cap-lock body{overflow:hidden;height:100%}
+.cpt{position:fixed;top:0;right:0;bottom:0;left:0;z-index:9999;display:flex;align-items:center;
+justify-content:center;padding:20px;overflow:auto;background:rgba(59,36,22,.88);
+-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);opacity:1;transition:opacity .45s ease}
+.cpt-off{opacity:0;pointer-events:none}
+.cap-card{background:#FFF7E8;color:#3B2416;border:1px solid #E8DCC3;border-radius:18px;
+padding:22px 20px 20px;max-width:390px;width:100%;text-align:center;box-shadow:0 18px 50px rgba(0,0,0,.35)}
+[data-theme='dark'] .cap-card{background:#2A1A12;color:#FFF7E8;border-color:#4A3228}
+.cap-ico{font-size:26px;line-height:1}
+.cap-t{margin:8px 0 6px;font-size:22px}
+.cap-sub{margin:0 0 16px;font-size:13px;color:#6B5546;line-height:1.4}
+[data-theme='dark'] .cap-sub{color:#D8C6B4}
+.cap-track{position:relative;height:56px;border-radius:28px;background:#F0E4CE;border:1px solid #E0D0B4;
+touch-action:none;-webkit-user-select:none;user-select:none;cursor:grab;outline:none}
+[data-theme='dark'] .cap-track{background:#3A271C;border-color:#553B2C}
+.cap-track:focus-visible{box-shadow:0 0 0 3px rgba(212,168,67,.75)}
+.cap-track.cap-grab{cursor:grabbing}
+.cap-fill{position:absolute;top:0;bottom:0;left:0;width:0;border-radius:28px;background:rgba(212,168,67,.35)}
+.cap-knob{position:absolute;top:4px;left:4px;width:48px;height:46px;border-radius:24px;background:#D4A843;
+color:#3B2416;display:grid;place-items:center;font-size:20px;font-weight:600;
+box-shadow:0 2px 8px rgba(0,0,0,.25);transition:transform .18s ease}
+.cap-status{margin:12px 0 0;font-size:12px;color:#8A6A46}
+[data-theme='dark'] .cap-status{color:#C4A98C}
+.cap-status.cap-ok{color:#2E7D4F;font-weight:600}
+[data-theme='dark'] .cap-status.cap-ok{color:#7FD2A2}
+
+
+.nwrap{min-width:0}.nstrip{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;border:1px solid #E8DCC3;border-radius:10px;overflow:hidden;background:#FFF;min-width:0}.nstrip img{width:100%;aspect-ratio:4/3;height:auto;object-fit:cover;display:block}@media(max-width:560px){.nstrip{grid-template-columns:repeat(2,1fr)}}
+
+
+.org{text-align:center;align-items:center}
+.org-av{display:grid;place-items:center;width:56px;height:56px;border-radius:50%;color:#FFF7E8;font-weight:800;font-size:18px;letter-spacing:.5px;margin:2px auto 10px}
+
+
+
+.partners{display:flex;flex-wrap:wrap;gap:16px;margin:10px 0 4px}
+.partner{flex:1 1 260px;max-width:400px;text-align:center;align-items:center;display:flex;flex-direction:column;padding:22px 18px}
+.partner img{width:100%;max-width:220px;height:auto;display:block;margin:0 auto 12px}
+
+
+
+.video-wrap{position:relative;aspect-ratio:4/3;background:#1D1410;border-bottom:1px solid #E8DCC3;overflow:hidden}
+[data-theme='dark'] .video-wrap{border-color:#4A3228}
+.vid{width:100%;height:100%;display:block;object-fit:contain;background:#1D1410}
+.vid-credit{font-size:11.5px;opacity:.72;margin:8px 0 0;line-height:1.35}
+.vid-credit a{color:inherit}
+.vid-note{font-size:11.5px;opacity:.72;margin:6px 0 0;line-height:1.35}
+
+
+
+.folk-grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));margin:10px 0 6px}
+.folk{display:flex;gap:12px;align-items:flex-start;min-width:0;background:var(--card);border:1px solid #E8DCC3;border-radius:14px;padding:14px}
+[data-theme='dark'] .folk{border-color:#4A3228}
+.folk-play{flex:0 0 44px;width:44px;height:44px;border:0;border-radius:50%;cursor:pointer;background:#D4A843;color:#3B2416;font-size:14px;line-height:1;display:grid;place-items:center;padding:0}
+.folk.on .folk-play{background:#5C2A1E;color:#FFF7E8}
+.folk-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
+.folk-title{font-size:13.5px}
+.folk-meta{font-size:12px;color:var(--mut);line-height:1.35}
+.folk-bar{position:relative;height:6px;border-radius:3px;background:rgba(92,42,30,.16);cursor:pointer}
+[data-theme='dark'] .folk-bar{background:rgba(255,247,232,.2)}
+.folk-bar i{position:absolute;top:0;bottom:0;left:0;width:0;border-radius:3px;background:#D4A843}
+.folk-time{font-size:11.5px;color:var(--mut);font-variant-numeric:tabular-nums}
+.folk-note{font-size:12.5px;color:var(--mut);margin:8px 0 0}
